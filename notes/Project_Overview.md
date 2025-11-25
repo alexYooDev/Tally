@@ -33,6 +33,8 @@ I am trying to build a desktop/mobile app that does accounting jobs for small/in
 
 - I want to log my spendings for materials/resources for my business, so that I can visualize the cash flow and make financial decisions
 
+- I want to manage stock of materials/resources/property rent fee/subscriptions(Youtube, etc...) for my business, so that I can keep track of the stock and make decisions on when to order more materials/resources.
+
 - I want a dashboard page, so that I can see cash flows in a single view.
 
 Acceptance Criteria:
