@@ -1,19 +1,19 @@
-#Agile Web/Mobile Application Development
+# Agile Web/Mobile Application Development
 - Produce working prototypes deployable to the market
 
-##Background:
+## Background:
 - Final year Master of Computer Science student
 - Learned Web Development, Object Oriented Programming and Design, Cloud Computing, Software Life Cycle Management, and Basics of Machine Learning (Data Science).
 - End goal is to become an independent developer that earns passive income from multiple products
 
-##Aim:
+## Aim:
 - Producing multiple apps that can turn into passive income flow
 - Building portfolio as app developers that can do full-stack development
 - Start from the target users around me and then expend
 - Provide apps that solve problems for target users 
 - For initial stage, aggressively adopt exiting (Selling the ownership of the product or business)
 
-##Preferred Tech Stacks (For Agile development)
+## Preferred Tech Stacks (For Agile development)
 - Frontend: Next.st 16 (or LTS)
 - Backend&Database: Supabase / PostgreSQL
 - Cache Store: Redis
