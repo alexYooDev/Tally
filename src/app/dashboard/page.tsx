@@ -55,7 +55,7 @@ export default async function DashboardPage() {
                     <h3 className='text-sm font-medium text-gray-600'>
                         Net Profit
                     </h3>
-                    <span className='text-2xl'>💰</span>
+                    <span className='text-2xl'>🤑</span>
                 </div>
                 <p className='text-3xl font-bold text-gray-900'>$0.00</p>
                 <p className='text-sm text-gray-500 mt-2'>
@@ -63,85 +63,66 @@ export default async function DashboardPage() {
                 </p>
             </div>
         </div>
+        
         {/* Getting Started */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-            🚀 Getting Started
-            </h2>
-            
-            <div className="space-y-4">
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                <span className="text-indigo-600 font-bold">1</span>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+                🏦 Getting Started
+            </h2>   
+        
+            {/* Horizontal Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Step 1 */}
+                <div className="border-2 border-indigo-100 rounded-xl p-6 hover:border-indigo-200 transition">
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                        Set up services
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Add the services or products you offer with their prices
+                    </p>
+                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                        Coming soon →
+                    </button>
                 </div>
-                <div>
-                <h3 className="font-medium text-gray-900 mb-1">
-                    Set up your services
-                </h3>
-                <p className="text-sm text-gray-600">
-                    Add the services or products you offer with their prices
-                </p>
-                </div>
-            </div>
 
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                <span className="text-indigo-600 font-bold">2</span>
+                {/* Step 2 */}
+                <div className="border-2 border-indigo-100 rounded-xl p-6 hover:border-indigo-200 transition">
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                        Log income
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Record revenue from your services and clients
+                    </p>
+                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                        Coming soon →
+                    </button>
                 </div>
-                <div>
-                <h3 className="font-medium text-gray-900 mb-1">
-                    Log your first income
-                </h3>
-                <p className="text-sm text-gray-600">
-                    Record revenue from your services
-                </p>
-                </div>
-            </div>
 
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                <span className="text-indigo-600 font-bold">3</span>
+                {/* Step 3 */}
+                <div className="border-2 border-indigo-100 rounded-xl p-6 hover:border-indigo-200 transition">
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                        Track spending
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Record business expenses and supplies
+                    </p>
+                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                        Coming soon →
+                    </button>
                 </div>
-                <div>
-                <h3 className="font-medium text-gray-900 mb-1">
-                    Track your spending
-                </h3>
-                <p className="text-sm text-gray-600">
-                    Record business expenses and supplies
-                </p>
-                </div>
-            </div>
 
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                <span className="text-indigo-600 font-bold">4</span>
+                {/* Step 4 */}
+                <div className="border-2 border-indigo-100 rounded-xl p-6 hover:border-indigo-200 transition">
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                        View insights
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Watch your dashboard come alive with real data
+                    </p>
+                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                        Coming soon →
+                    </button>
                 </div>
-                <div>
-                <h3 className="font-medium text-gray-900 mb-1">
-                    View your insights
-                </h3>
-                <p className="text-sm text-gray-600">
-                    Watch your dashboard come alive with real data
-                </p>
-                </div>
-            </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-600 mb-4">
-                Ready to start? Coming soon:
-            </p>
-            <div className="flex flex-wrap gap-3">
-                <button className="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed">
-                Log Income (Coming Soon)
-                </button>
-                <button className="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed">
-                Log Spending (Coming Soon)
-                </button>
-                <button className="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed">
-                Manage Services (Coming Soon)
-                </button>
-            </div>
             </div>
         </div>
 
