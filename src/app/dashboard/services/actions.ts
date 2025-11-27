@@ -11,6 +11,21 @@ import type { UpdateServiceInput } from '@/types/database';
  * Get all services for the current user
  */
 
+type Category = {
+  id: number;
+  name: string;
+};
+
+type ServiceRow = {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string | null;
+  default_price: number;
+  category_id: number | null;
+  categories: Category[] | Category | null;
+};
+
 export async function getServices() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -29,7 +44,8 @@ export async function getServices() {
             )
         `)
         .eq('user_id', user.id)
-        .order('name');
+        .order('name')
+        .returns<ServiceRow[]>();
     
     if (error) {
         console.log('Error fetching services:', error);
@@ -90,7 +106,8 @@ export async function getService(id: string) {
     `)
     .eq('id', id)
     .eq('user_id', user.id)
-    .single();
+    .single()
+    .returns<ServiceRow>();
 
     if (error) {
     console.error('Error fetching service:', error);
