@@ -34,13 +34,13 @@ export type Database = {
             };
             services: {
                 Row: Service;
-                Insert: Omit<Service, 'id' | 'created_at' | 'updated_at'>;
-                Update: Partial<Omit<Service, 'id' | 'created_at' | 'updated_at' >>; 
+                Insert: Omit<Service, 'id' | 'created_at' | 'updated_at' | 'is_active'>;
+                Update: Partial<Omit<Service, 'id' | 'created_at' | 'updated_at' | 'user_id'>>;
             }
             income_transactions: {
                 Row: IncomeTransaction;
                 Insert: Omit<IncomeTransaction, 'id' | 'created_at' | 'updated_at'>;
-                Update: Partial<Omit<Service, 'id' | 'created_at' | 'updated_at'>>;
+                Update: Partial<Omit<IncomeTransaction, 'id' | 'created_at' | 'updated_at' | 'user_id'>>;
             };
             spending_transactions: {
                 Row: SpendingTransaction;

@@ -1,6 +1,9 @@
 # Tally
 Tally is an accounting app for streamlined cashflow logging and tracking for all small/independent business owners
 
+## Link to the App
+[Tally - Your one-stop accountant for small businesses](https://tally-lake.vercel.app/)
+
 ## Getting Started
 
 First, run the development server:
