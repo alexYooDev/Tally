@@ -10,9 +10,8 @@ import type { UpdateServiceInput } from '@/types/database';
 /**
  * Get all services for the current user
  */
-
 type Category = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -20,11 +19,12 @@ type ServiceRow = {
   id: string;
   user_id: string;
   name: string;
-  description: string | null;
   default_price: number;
-  category_id: number | null;
-  categories: Category[] | Category | null;
+  description: string | null;
+  category_id: string | null;
+  categories: Category | Category[] | null;
 };
+
 
 export async function getServices() {
     const supabase = await createClient();
@@ -110,15 +110,19 @@ export async function getService(id: string) {
     return { error: 'Service not found' };
     }
 
-    // Transform the data to match expected format
-    const transformedData = {
-    ...data,
-    category: data.categories ? {
-        id: data.categories.id,
-        name: data.categories.name
-    } : null,
-    categories: undefined // Remove the original field
-    };
+    const transformedData = data?.map(service => {
+        const categoryData = Array.isArray(service.categories)
+        ? service.categories[0]
+        : service.categories;
+
+        return {
+        ...service,
+        category: categoryData
+        ? { id: categoryData.id, name: categoryData.name }
+        : null,
+        categories: undefined,
+        };
+    });
 
     return { data: transformedData };
 }
