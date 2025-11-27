@@ -3,22 +3,20 @@ import { getServices } from './actions';
 import { DeleteServiceButton } from './delete-button';
 import { formatCurrency } from '@/lib/utils';
 
+type Category = {
+    id: string;
+    name: string;
+};
+
 type Service = {
     id: string;
     name: string;
     description: string | null;
     default_price: number;
     category_id: string | null;
-    category: {
-        id: string;
-        name: string;
-    } | null;
+    categories: Category[] | Category | null;
 };
 
-type Category = {
-    id: string;
-    name: string;
-};
 
 export default async function ServicesPage() {
     const { data: services, error } = await getServices();
