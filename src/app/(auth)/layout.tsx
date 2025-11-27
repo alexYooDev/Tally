@@ -22,7 +22,7 @@ export default async function AuthLayout({
             <div className='w-full max-w-md'>
                 {/* Logo/Brand */}
                 <div className='text-center mb-8'>
-                    <h1 className='text-4xl font-bold mb-2'>Tally</h1>
+                    <h1 className='text-4xl font-bold text-black mb-2'>Tally</h1>
                     <p className='text-gray-600'>
                         Simple accounting for small businesses
                     </p>

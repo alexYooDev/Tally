@@ -4,6 +4,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { logout } from '@/app/(auth)/actions';
+import Link from 'next/link';
 
 export default async function DashboardLayout({
     children
@@ -23,11 +24,40 @@ export default async function DashboardLayout({
             <nav className='bg-white shadow-sm border-b border-gray-200'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                     <div className='flex justify-between items-center h-16'>
-                        {/* Logo */}
-                        <div className='flex items-center'>
-                            <h1 className='text-2xl font-bold text-indigo-600'>
+                        {/* Logo & Navigation*/}
+                        <div className='flex items-center gap-8'>
+                            <Link
+                                href='/dashboard'
+                                className='text-2xl font-bold text-indigo-600'>
                                 Tally
-                            </h1>
+                            </Link>
+                            {/* Nav Links */}
+                            <div className='hidden md:flex items-center gap-6'>
+                                <Link
+                                    href='/dashboard'
+                                    className='text-sm font-medium text-gray-600 hover:text-gray-900 transition'
+                                >
+                                    Dashboard
+                                </Link>
+                                <Link
+                                    href='/dashboard/services'
+                                    className='text-sm font-medium text-gray-600 hover:text-gray-900 transition'
+                                >
+                                    Services
+                                </Link>
+                                <Link
+                                    href='/dashboard/income'
+                                    className='text-sm font-medium text-gray-600 hover:text-gray-900 transition'
+                                >
+                                    Income (Soon)
+                                </Link>
+                                <Link
+                                    href='/dashboard/spending'
+                                    className='text-sm font-medium text-gray-600 hover:text-gray-900 transition'
+                                >
+                                    Spending (Soon)
+                                </Link>
+                            </div>
                         </div>
                         {/* User Menu */}
                         <div className='flex items-center gap-4'>
