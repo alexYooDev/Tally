@@ -52,21 +52,13 @@ export async function getServices() {
         return { error: error.message || 'Error fetching services'};
     }
 
-    const transformedData = data?.map(service => {
-    // Handle both object and array formats from Supabase
-        const categoryData = Array.isArray(service.categories) 
-            ? service.categories[0] 
-            : service.categories;
-
-        return {
-            ...service,
-            category: categoryData ? {
-            id: categoryData.id,
-            name: categoryData.name
-            } : null,
-            categories: undefined
-        };
-    });
+    const transformedData = data?.map(service => ({
+        ...service,
+        category: service.categories
+        ? { id: service.categories.id, name: service.categories.name }
+        : null,
+        categories: undefined,
+    }));
 
     return { data: transformedData };
 };
