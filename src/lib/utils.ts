@@ -6,6 +6,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { format, parseISO, isValid } from 'date-fns';
+import { Database } from '@/types/supabase';
 
 // ================================================
 // UI UTILITIES
@@ -427,3 +428,51 @@ export function getErrorMessage(error: unknown): string {
 }
 
 
+// ================================================
+// Type-Safe Supabase Helpers
+// ================================================
+
+/**
+ * Type-safe wrapper for Supabase insert operations
+ * Centralizes the workaround for Supabase type generation issues
+ * 
+ * @param supabase - Supabase client instance
+ * @param table - Table name from Database schema
+ * @param data - Data to insert, properly typed from Database schema
+ * @returns Promise with error if operation failed
+ */
+export async function insertRecord<T extends keyof Database['public']['Tables']>(
+    supabase: any,
+    table: T,
+    data: Database['public']['Tables'][T]['Insert']
+): Promise<{ error: any | null }> {
+    const result = await (supabase.from(table) as any).insert(data);
+    return result;
+}
+
+/**
+ * Type-safe wrapper for Supabase update operations
+ * Centralizes the workaround for Supabase type generation issues
+ * 
+ * @param supabase - Supabase client instance
+ * @param table - Table name from Database schema
+ * @param data - Data to update, properly typed from Database schema
+ * @param conditions - Key-value pairs for WHERE conditions (e.g., { id: '123', user_id: 'abc' })
+ * @returns Promise with error if operation failed
+ */
+export async function updateRecord<T extends keyof Database['public']['Tables']>(
+    supabase: any,
+    table: T,
+    data: Database['public']['Tables'][T]['Update'],
+    conditions: Record<string, any>
+): Promise<{ error: any | null }> {
+    let query = (supabase.from(table) as any).update(data);
+    
+    // Apply all conditions
+    for (const [key, value] of Object.entries(conditions)) {
+        query = query.eq(key, value);
+    }
+    
+    const result = await query;
+    return result;
+}

@@ -10,11 +10,12 @@ type Category = {
 
 type Service = {
     id: string;
+    user_id: string;
     name: string;
     description: string | null;
     default_price: number;
     category_id: string | null;
-    categories: Category[] | Category | null;
+    category: Category | null;
 };
 
 

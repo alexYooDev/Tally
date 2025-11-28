@@ -59,3 +59,66 @@ export type Database = {
         };
     };
 };
+
+// ================================================
+// Supabase Response Types
+// ================================================
+
+/**
+ * Category with minimal fields (id and name only)
+ */
+export type CategoryMinimal = {
+    id: string;
+    name: string;
+};
+
+/**
+ * Service row as returned from Supabase with categories join
+ */
+export type ServiceRow = {
+    id: string;
+    user_id: string;
+    name: string;
+    default_price: number;
+    description: string | null;
+    category_id: string | null;
+    categories: CategoryMinimal | CategoryMinimal[] | null;
+};
+
+/**
+ * Service with transformed category field (single object instead of join)
+ */
+export type ServiceWithCategory = {
+    id: string;
+    user_id: string;
+    name: string;
+    default_price: number;
+    description: string | null;
+    category_id: string | null;
+    category: CategoryMinimal | null;
+};
+
+/**
+ * Category result with just the ID (used for create/get operations)
+ */
+export type CategoryResult = {
+    id: string;
+};
+
+/**
+ * Generic action result type for server actions
+ */
+export type ActionResult<T = void> = {
+    data?: T;
+    error?: string;
+    success?: boolean;
+};
+
+// ================================================
+// Supabase Helper Types
+// ================================================
+
+/**
+ * Type representing a Supabase client instance
+ */
+export type SupabaseClient = any; // Will be properly typed when createClient is available
