@@ -49,7 +49,7 @@ export default async function DashboardLayout({
                                     href='/dashboard/income'
                                     className='text-sm font-medium text-gray-600 hover:text-gray-900 transition'
                                 >
-                                    Income (Soon)
+                                    Income
                                 </Link>
                                 <Link
                                     href='/dashboard/spending'

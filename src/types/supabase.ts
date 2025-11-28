@@ -99,6 +99,49 @@ export type ServiceWithCategory = {
 };
 
 /**
+ * Service with minimal fields (for dropdowns and references)
+ */
+export type ServiceMinimal = {
+    id: string;
+    name: string;
+    default_price: number;
+};
+
+/**
+ * Income transaction row as returned from Supabase with services join
+ */
+export type IncomeTransactionRow = {
+    id: string;
+    user_id: string;
+    date: string;
+    client_name: string | null;
+    service_id: string | null;
+    price: number;
+    discount: number;
+    total_received: number;
+    payment_method: string;
+    notes: string | null;
+    services: ServiceMinimal | ServiceMinimal[] | null;
+};
+
+/**
+ * Income transaction with transformed service field (single object instead of join)
+ */
+export type IncomeTransactionWithService = {
+    id: string;
+    user_id: string;
+    date: string;
+    client_name: string | null;
+    service_id: string | null;
+    price: number;
+    discount: number;
+    total_received: number;
+    payment_method: string;
+    notes: string | null;
+    service: ServiceMinimal | null;
+};
+
+/**
  * Category result with just the ID (used for create/get operations)
  */
 export type CategoryResult = {

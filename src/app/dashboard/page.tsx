@@ -96,9 +96,11 @@ export default async function DashboardPage() {
                     <p className="text-sm text-gray-600 mb-4">
                         Record revenue from your services and clients
                     </p>
-                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
-                        Coming soon →
-                    </button>
+                    <Link href='/dashboard/income'>
+                        <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                            Go to my income →
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Step 3 */}
