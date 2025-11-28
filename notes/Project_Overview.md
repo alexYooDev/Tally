@@ -21,39 +21,91 @@
 
 ---
 
-## Accounting App
 
-### Purpose:
-I am trying to build a desktop/mobile app that does accounting jobs for small/independent business owners track their income and spending flows (for now, manually logging cash).
+## 📌 PROJECT OVERVIEW: TALLY - Accounting App for Indie Business Owners
 
-### User Stories:
-- As a Business Owner: 
+### Purpose
+Build a cross-platform accounting application for small/independent business owners to track income and spending flows, manage inventory, and visualize cash flow.
 
-- I want to log my income for each service/product I have provided or sold, so that I can keep track of individual or total income I have made
+### Target Users
+- Small business owners
+- Independent contractors
+- Service providers (focus: lash technicians, beauty professionals)
+- Solo entrepreneurs
 
-- I want to log my spendings for materials/resources for my business, so that I can visualize the cash flow and make financial decisions
+### Primary Use Case
+**Sarah** - Independent Lash Technician
+- Tracks income from lash services (Classic, Volume, Fills, Removals)
+- Manages service pricing and categories
+- Monitors cash flow and client payments
+- Plans to expand to inventory and subscription tracking
 
-- I want to manage stock of materials/resources/property rent fee/subscriptions(Youtube, etc...) for my business, so that I can keep track of the stock and make decisions on when to order more materials/resources.
+### Timeline
+- **Start Date**: November 26, 2024
+- **Target Completion**: 3-4 weeks (Mid-December 2024)
+- **MVP Launch**: End of December 2024
 
-- I want a dashboard page, so that I can see cash flows in a single view.
+### Business Model
+- Launch as MVP for target users
+- Gain initial traction
+- Aggressively pursue exit (sell ownership) once successful
+- Build portfolio as full-stack developer
+- Multiple products for passive income
 
-Acceptance Criteria:
-- Attributes are Date, Client Name, Service, Price, Discount, Total Received, Payment (Price - Discounted Price), Payment Method, Notes.
-- Dashboard provides line charts for cash flow view (adjustable time frame), a pie chart for top most of popular services/products (adjustable time frame).
+---
 
-- I want to filter the incomes/spendings by certain period window (day/week/month/year), so that it is easy for me to view the cash flow in certain period of time
+## 🛠️ TECH STACK
 
-- I want my specific service management page where I can CRUD my services or products, so that, when I log my income I can select which service produced income
+### Frontend
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **State Management**: React Hooks, Server Components
 
-Acceptance Criteria:
-- For MVP1, prices are set to AUD
-- Services will be categorized by category names that can also be CRUD
+### Backend & Database
+- **Backend**: Next.js Server Actions
+- **Database**: PostgreSQL (Supabase)
+- **Authentication**: Supabase Auth
+- **API**: Supabase Client Libraries
 
-### Target:
-Small/Independent Business Owners
+### Deployment
+- **Platform**: Vercel (primary) / Netlify (alternative)
+- **Database Hosting**: Supabase Cloud
+- **Domain**: TBD
 
-### Deadline:
- In 3 weeks to a month
+### Development Tools
+- **Version Control**: Git
+- **Package Manager**: npm
+- **IDE**: VS Code (assumed)
 
-### Tech Stack:
-As listed above 
+---
+
+## 📋 REQUIREMENTS & USER STORIES
+
+### Core Features (MVP)
+
+#### 1. Services Management ✅ COMPLETE
+**As a Business Owner:**
+- ✅ I want to create and manage my services/products
+- ✅ I want to categorize services for better organization
+- ✅ I want to set default prices for each service
+- ✅ I want to add descriptions to services
+- ✅ I want to edit service details when needed
+- ✅ I want to delete services I no longer offer
+
+**Acceptance Criteria:**
+- ✅ CRUD operations for services
+- ✅ Category management (auto-create/select existing)
+- ✅ Price formatting in AUD
+- ✅ Validation for required fields
+- ✅ Responsive design (mobile/tablet/desktop)
+- ✅ Delete confirmation to prevent accidents
+
+**Technical Requirements:**
+- ✅ Server-side operations for security
+- ✅ Type-safe with TypeScript
+- ✅ Proper foreign key relationships
+- ✅ RLS policies for data isolation
+
+---
