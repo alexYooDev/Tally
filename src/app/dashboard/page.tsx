@@ -3,6 +3,7 @@
 // ================================================
 
 import { createClient } from '@/lib/supabase/server';
+import Link from 'next/link';
 
 export default async function DashboardPage() {
     const supabase = await createClient();
@@ -80,9 +81,11 @@ export default async function DashboardPage() {
                     <p className="text-sm text-gray-600 mb-4">
                         Add the services or products you offer with their prices
                     </p>
-                    <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
-                        Coming soon →
-                    </button>
+                    <Link href='/dashboard/services'>
+                        <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700 cursor-pointer">
+                            Go to my services →
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Step 2 */}
