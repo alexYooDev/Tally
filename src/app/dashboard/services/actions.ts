@@ -5,25 +5,16 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import type { UpdateServiceInput } from '@/types/database';
+import type { 
+    Database,
+    ServiceRow,
+    CategoryResult,
+} from '@/types/supabase';
+import { insertRecord, updateRecord } from '@/lib/utils';
 
 /**
  * Get all services for the current user
  */
-type Category = {
-  id: string;
-  name: string;
-};
-
-type ServiceRow = {
-  id: string;
-  user_id: string;
-  name: string;
-  default_price: number;
-  description: string | null;
-  category_id: string | null;
-  categories: Category | Category[] | null;
-};
 
 
 export async function getServices() {
@@ -44,21 +35,32 @@ export async function getServices() {
             )
         `)
         .eq('user_id', user.id)
-        .order('name')
-        .returns<ServiceRow[]>();
+        .order('name');
     
     if (error) {
         console.log('Error fetching services:', error);
         return { error: error.message || 'Error fetching services'};
     }
 
-    const transformedData = data?.map(service => ({
-        ...service,
-        category: service.categories
-        ? { id: service.categories.id, name: service.categories.name }
-        : null,
-        categories: undefined,
-    }));
+    // Type assertion and transformation
+    const rawData = data as unknown as ServiceRow[];
+    const transformedData = rawData?.map(service => {
+        const categoryData = Array.isArray(service.categories)
+            ? service.categories[0]
+            : service.categories;
+
+        return {
+            id: service.id,
+            user_id: service.user_id,
+            name: service.name,
+            default_price: service.default_price,
+            description: service.description,
+            category_id: service.category_id,
+            category: categoryData
+                ? { id: categoryData.id, name: categoryData.name }
+                : null,
+        };
+    });
 
     return { data: transformedData };
 };
@@ -88,41 +90,44 @@ export async function getService(id: string) {
     }
 
     const { data, error } = await supabase
-    .from('services')
-    .select(`
-        *,
-        categories!category_id (
-        id,
-        name
-        )
-    `)
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .single()
-    .returns<ServiceRow>();
+        .from('services')
+        .select(`
+            *,
+            categories!category_id (
+                id,
+                name
+            )
+        `)
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .single();
 
     if (error) {
-    console.error('Error fetching service:', error);
-    return { error: error.message };
+        console.error('Error fetching service:', error);
+        return { error: error.message };
     }
 
     if (!data) {
-    return { error: 'Service not found' };
+        return { error: 'Service not found' };
     }
 
-    const transformedData = data?.map(service => {
-        const categoryData = Array.isArray(service.categories)
-        ? service.categories[0]
-        : service.categories;
+    // Type assertion and transformation
+    const rawData = data as unknown as ServiceRow;
+    const categoryData = Array.isArray(rawData.categories)
+        ? rawData.categories[0]
+        : rawData.categories;
 
-        return {
-        ...service,
+    const transformedData = {
+        id: rawData.id,
+        user_id: rawData.user_id,
+        name: rawData.name,
+        default_price: rawData.default_price,
+        description: rawData.description,
+        category_id: rawData.category_id,
         category: categoryData
-        ? { id: categoryData.id, name: categoryData.name }
-        : null,
-        categories: undefined,
-        };
-    });
+            ? { id: categoryData.id, name: categoryData.name }
+            : null,
+    };
 
     return { data: transformedData };
 }
@@ -159,7 +164,7 @@ export async function getServiceCategories() {
  * Create or get a category by name
  */
 
-async function getOrCreateCategory(name: string) {
+async function getOrCreateCategory(name: string): Promise<{ data?: { id: string }; error?: string }> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -177,26 +182,39 @@ async function getOrCreateCategory(name: string) {
         .single();
 
     if (existing) {
-        return { data: existing };
+        return { data: existing as CategoryResult };
     }
 
     /* if none exists, create new  */
-    const { data, error } = await supabase
-        .from('categories')
-        .insert({
+    const insertData: Database['public']['Tables']['categories']['Insert'] = {
         user_id: user.id,
         name,
         type: 'service',
-        })
-        .select('id')
-        .single();
+        color: '#6366f1', // Default indigo color
+    };
 
-    if (error) {
-        console.error('Error creating category:', error);
-        return { error: error.message };
+    const insertResult = await insertRecord(supabase, 'categories', insertData);
+    
+    if (insertResult.error) {
+        console.error('Error creating category:', insertResult.error);
+        return { error: insertResult.error.message };
     }
 
-    return { data };
+    // Fetch the created category to get its ID
+    const { data, error } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('name', name)
+        .eq('type', 'service')
+        .single();
+
+    if (error || !data) {
+        console.error('Error fetching created category:', error);
+        return { error: error?.message || 'Failed to fetch created category' };
+    }
+
+    return { data: data as CategoryResult };
 };
 
 /**
@@ -243,16 +261,15 @@ export async function createService(formData: FormData) {
     }
 
     /* Create service */
+    const insertData: Database['public']['Tables']['services']['Insert'] = {
+        user_id: user.id,
+        name: name.trim(),
+        category_id: categoryId ?? null,
+        default_price: price,
+        description: description?.trim() ?? null,
+    };
 
-    const { error } = await supabase
-        .from('services')
-        .insert({
-            user_id: user.id,
-            name: name.trim(),
-            category_id: categoryId,
-            default_price: price,
-            description: description.trim() || null,
-        });
+    const { error } = await insertRecord(supabase, 'services', insertData);
 
     if (error) {
         console.error('Error creating service', error);
@@ -301,16 +318,17 @@ export async function updateService(id: string, formData: FormData) {
     }
 
     // Update service
-    const { error } = await supabase
-        .from('services')
-        .update({
+    const updateData: Database['public']['Tables']['services']['Update'] = {
         name: name.trim(),
-        category_id: categoryId,
+        category_id: categoryId ?? null,
         default_price: price,
-        description: description?.trim() || null,
-        })
-        .eq('id', id)
-        .eq('user_id', user.id);
+        description: description?.trim() ?? null,
+    };
+
+    const { error } = await updateRecord(supabase, 'services', updateData, {
+        id,
+        user_id: user.id,
+    });
 
     if (error) {
         console.error('Error updating service:', error);
