@@ -52,13 +52,13 @@ export function ServiceForm({
         <form ref={formRef} onSubmit={handleSubmit} className='space-y-6'>
             {/* Error Message */}
             { error && (
-                <div className='p-4 bg-red-50 border border-red-200 rounded-lg'>
-                    <p className='text-sm text-red-600'>{error}</p>
+                <div className='p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/40 dark:border-red-800'>
+                    <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
                 </div>
             )}
             {/* Service Name */}
             <div>
-                <label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100'>
                     Service Name *
                 </label>
                 <input 
@@ -68,7 +68,7 @@ export function ServiceForm({
                     required
                     defaultValue={initialData?.name}
                     placeholder='e.g., Classic Full Set'
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'
                     disabled={loading}
                 />
             </div>
@@ -76,7 +76,7 @@ export function ServiceForm({
             <div>
                 <label 
                     htmlFor='category'
-                    className='block text-sm font-medium text-gray-700 mb-2'
+                    className='block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100'
                 >
                     Category
                 </label>
@@ -86,7 +86,7 @@ export function ServiceForm({
                             id='category' 
                             name='category'
                             defaultValue={initialData?.category || ''}
-                            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'
                             disabled={loading}
                         >
                             <option value="">Select a category</option>
@@ -99,7 +99,7 @@ export function ServiceForm({
                         <button
                             type='button'
                             onClick={() => setShowCustomCategory(true)}
-                            className='mt-2 text-sm text-indigo-600 hover:text-indigo-700'
+                            className='mt-2 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300'
                         >
                             <PlusSquareIcon className='inline w-4 h-4 mr-2' />
                             Add Custom Category
@@ -126,17 +126,17 @@ export function ServiceForm({
                         </button>
                     </>
                 )}
-                <p className='mt-1 text-xs texy-gray-500'>
+                <p className='mt-1 text-xs texy-gray-500 dark:text-gray-400'>
                     Optional - helps organize your services
                 </p>
             </div>
             {/* Prices */}
             <div>
-                <label htmlFor='default' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='default' className='block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100'>
                     Default Price
                 </label>
                 <div className='relative'>
-                    <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500'>
+                    <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400'>
                         $
                     </span>
                     <input 
@@ -146,18 +146,18 @@ export function ServiceForm({
                         required min='0' 
                         step='0.01'
                         defaultValue={initialData?.default_price || ''}
-                        className='w-full px-7 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                        className='w-full px-7 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'
                         disabled={loading}  
                     />
                 </div>
-                <p className='mt-1 text-xs text-gray-500'>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     You can apply discounts when logging incomes
                 </p>
             </div>
 
             {/* Description */}
             <div>
-                <label htmlFor='description' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='description' className='block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100'>
                     Description
                 </label>
                 <textarea 
@@ -166,19 +166,19 @@ export function ServiceForm({
                     rows={3}
                     defaultValue={initialData?.description}
                     placeholder='e.g., Takes approximately 90 minutes, includes consultation.'
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition' 
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700' 
                     disabled={loading}
                 />
-                <p className='mt-1 text-xs text-gray-500'>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Optional - add notes about duration, what's included, etc.
                 </p>
             </div>
             {/* Actions */}
-            <div className='flex gap-3 pt-4 border-t border-gray-200'>
+            <div className='flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700'>
                 <button
                     type='submit'
                     disabled={loading}
-                    className='flex-1 bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='flex-1 bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition disabled:opacity-50 disabled:cursor-not-allowed dark:bg-indigo-700 dark:hover:bg-indigo-800 dark:focus:ring-indigo-800'
                 >
                     {loading ? (
                         <span className='flex items-center justify-center'>
@@ -194,7 +194,7 @@ export function ServiceForm({
                 </button>
                 <a 
                     href='/dashboard/services'
-                    className='px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition'
+                    className='px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 dark:hover:bg-gray-700'
                 >
                     Cancel
                 </a>
