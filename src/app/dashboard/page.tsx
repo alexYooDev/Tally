@@ -17,7 +17,7 @@ export default async function DashboardPage() {
         .eq('user_id', user?.id || '');
 
     // Calculate totals
-    const totalIncome = incomeData?.reduce((sum, t) => sum + t.total_received, 0) || 0;
+    const totalIncome = (incomeData as { total_received: number }[] | null)?.reduce((sum, t) => sum + t.total_received, 0) || 0;
     const totalSpending = 0; // Placeholder until spending feature is implemented
     const netProfit = totalIncome - totalSpending;
     const incomeCount = incomeData?.length || 0;

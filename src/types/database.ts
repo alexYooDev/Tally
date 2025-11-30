@@ -39,7 +39,7 @@ export interface Category extends BaseEntity {
     user_id: string;
     name: string;
     type: CategoryType;
-    color: string;
+    color?: string; // Optional - not currently used
 }
     
 export interface Service extends BaseEntity {
