@@ -190,7 +190,6 @@ async function getOrCreateCategory(name: string): Promise<{ data?: { id: string 
         user_id: user.id,
         name,
         type: 'service',
-        color: '#6366f1', // Default indigo color
     };
 
     const insertResult = await insertRecord(supabase, 'categories', insertData);

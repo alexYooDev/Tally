@@ -40,25 +40,25 @@ export default function SignupPage() {
         <div>
             {/* Header */}
             <div className='mb-8'>
-                <h2 className='text-2xl font-bold text-gray-900 mb-2'>
+                <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
                     Create your account
                 </h2>
-                <p className='text-gray-600'>
+                <p className='text-gray-600 dark:text-gray-400'>
                     Start tracking your business money flow today
                 </p>
             </div>
             {/* Error Message */}
             { error && (
-                <div className='mb-6 p-4 bg-green-50 border border-green-200 rounded-lg'>
-                    <p className='text-sm text-green-600'>
+                <div className='mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
+                    <p className='text-sm text-red-600 dark:text-red-400'>
                         {error}
                     </p>
                 </div>
             )}
             {/* Success Message */}
             { success && (
-                <div className='mb-6 p-4 bg-green-50 border border-green-200 rounded-lg'>
-                    <p className='text-sm text-green-600'>
+                <div className='mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg'>
+                    <p className='text-sm text-green-600 dark:text-green-400'>
                         {success}
                     </p>
                 </div>
@@ -67,7 +67,7 @@ export default function SignupPage() {
             <form onSubmit={handleSubmit} className='space-y-6'>
                 {/* Eamil field */}
                 <div>
-                    <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='email' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Email
                     </label>
                     <input
@@ -76,14 +76,14 @@ export default function SignupPage() {
                         type='email'
                         autoComplete='email'
                         required
-                        className='mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500'
+                        className='mt-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500'
                         placeholder='your@email.com'
                         disabled={loading}
                     />
                 </div>
                 {/* Password field */}
                 <div>
-                    <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='password' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Password
                     </label>
                     <input
@@ -92,28 +92,28 @@ export default function SignupPage() {
                         type='password'
                         autoComplete='new-password'
                         required
-                        className='mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500'
+                        className='mt-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
                         placeholder='••••••••'
                         disabled={loading}
                     />
-                    <p className='mt-1 text-ts text-gray-500'>
+                    <p className='mt-1 text-ts text-gray-500 dark:text-gray-400'>
                         At least 6 characters
                     </p>
                 </div>
 
                 {/* Confirm Password Field */}
                 <div>
-                    <label htmlFor='confirmPassword' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='confirmPassword' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Confirm Password
                     </label>
-                    <input 
+                    <input
                         id='confirmPassword'
                         name='confirmPassword'
                         type='password'
                         autoComplete='new-password'
                         required
                         minLength={6}
-                        className='mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500'
+                        className='mt-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
                         placeholder='••••••••'
                         disabled={loading}
                     />
@@ -125,16 +125,16 @@ export default function SignupPage() {
                         name="terms"
                         type="checkbox"
                         required
-                        className="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
                         disabled={loading}
                     />
-                    <label htmlFor="terms" className="ml-2 block text-sm text-gray-600">
+                    <label htmlFor="terms" className="ml-2 block text-sm text-gray-600 dark:text-gray-400">
                         I agree to the{' '}
-                        <Link href="/terms" className="text-indigo-600 hover:text-indigo-500">
+                        <Link href="/terms" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
                         Terms of Service
                         </Link>{' '}
                         and{' '}
-                        <Link href="/privacy" className="text-indigo-600 hover:text-indigo-500">
+                        <Link href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
                         Privacy Policy
                         </Link>
                     </label>
@@ -143,7 +143,7 @@ export default function SignupPage() {
                 <button
                     type='submit'
                     disabled={loading}
-                    className='w-full bg-indigo-600 text-white py-3 py-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='w-full bg-indigo-600 dark:bg-indigo-500 text-white py-3 py-4 rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                     {loading ? (
                         <span className="flex items-center justify-center">
@@ -159,11 +159,11 @@ export default function SignupPage() {
                 </button>
                 {/* Login Link */}
                 <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                         Already have an account?{' '}
                         <Link
                             href="/login"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                            className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"
                             >
                             Sign in
                         </Link>

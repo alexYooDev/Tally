@@ -55,7 +55,7 @@ export function DeleteIncomeButton({ transactionId, transactionLabel }: DeleteIn
     return (
         <button
             onClick={() => setShowConfirm(true)}
-            className='flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition'
+            className='flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800 cursor-pointer'
         >
             Delete
         </button>

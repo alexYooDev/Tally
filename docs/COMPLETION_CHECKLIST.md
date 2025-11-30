@@ -21,7 +21,9 @@ Track remaining tasks to MVP launch.
 - [x] Delete service
 - [x] Category management
 - [x] Form validation
-- [x] Responsive design
+- [x] Responsive design (updated with table layout)
+- [x] Desktop table view + Mobile card view
+- [x] Category badges
 - [x] Testing complete
 
 ### ✅ Income Logging (Complete - Day 3)
@@ -195,10 +197,10 @@ Total: 30/92 tasks complete (33%)
 
 ### By Time
 ```
-Completed:  15 hours
-Remaining:  ~10 hours
+Completed:  15.5 hours
+Remaining:  ~9.5 hours
 Total:      ~25 hours
-Progress:   60%
+Progress:   62%
 ```
 
 ### By Day

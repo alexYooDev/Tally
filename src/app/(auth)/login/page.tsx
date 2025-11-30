@@ -37,27 +37,27 @@ export default function LoginPage() {
         <div>
             {/* Header */}
             <div className='mb-8'>
-                <h2 className='text-2xl font-bold text-gray-900 mb-2'>
+                <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
                     Welcome back!
                 </h2>
-                <p className='text-gray-600'>
+                <p className='text-gray-600 dark:text-gray-400'>
                     Sign in to your Tally account
                 </p>
             </div>
             {/* Error Message */}
             { error && (
-                <div className='mb-6 p-4 bg-red-50 border border-red-200 rounded-lg'>
-                    <p className='text-sm text-red-600'>
+                <div className='mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
+                    <p className='text-sm text-red-600 dark:text-red-400'>
                         {error}
                     </p>
                 </div>
             )}
-            
+
             {/* Login Form */}
             <form onSubmit={handleSubmit} className='space-y-6'>
                 {/* Email */}
                 <div>
-                    <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='email' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Email
                     </label>
                     <input
@@ -66,13 +66,13 @@ export default function LoginPage() {
                         type='email'
                         autoComplete='email'
                         required
-                        className='mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500'
+                        className='mt-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500'
                         placeholder='your@email.com'
                     />
                 </div>
                 {/* Password */}
                 <div>
-                    <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='password' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Password
                     </label>
                     <input
@@ -81,11 +81,11 @@ export default function LoginPage() {
                         type='password'
                         autoComplete='current-password'
                         required
-                        className='mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500'
+                        className='mt-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
                         placeholder='••••••••'
                         disabled={loading}
                     />
-                    <Link href='/forgot-password' className='text-sm text-indigo-600 hover:text-indigo-500'>
+                    <Link href='/forgot-password' className='text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300'>
                         Forgot your password?
                     </Link>
                 </div>
@@ -93,7 +93,7 @@ export default function LoginPage() {
                 <button
                     type='submit'
                     disabled={loading}
-                    className='w-full bg-indigo-600 text-white py-3 py-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='w-full bg-indigo-600 dark:bg-indigo-500 text-white py-3 py-4 rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition disabled:opacity-50 disabled:cursor-not-allowed'
                 >
                     {loading ? (
                         <span className="flex items-center justify-center">
@@ -110,11 +110,11 @@ export default function LoginPage() {
             </form>
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                     Don't have an account?{' '}
                     <Link
                         href="/signup"
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                        className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"
                     >
                         Sign up
                     </Link>
