@@ -15,28 +15,28 @@ interface EditServicePageProps {
 }
 
 export default async function EditServicePage({ params }: EditServicePageProps) {
-  // Handle both Next.js 14 (direct params) and Next.js 15+ (Promise params)
-  const resolvedParams = await Promise.resolve(params);
-  const serviceId = resolvedParams.id;
+    // Handle both Next.js 14 (direct params) and Next.js 15+ (Promise params)
+    const resolvedParams = await Promise.resolve(params);
+    const serviceId = resolvedParams.id;
 
-  // Validate ID exists
-  if (!serviceId || serviceId === 'undefined') {
+    // Validate ID exists
+    if (!serviceId || serviceId === 'undefined') {
     console.error('No service ID provided');
     notFound();
-  }
+    }
 
-  const { data: service, error: serviceError } = await getService(serviceId);
-  const { data: categories } = await getServiceCategories();
+    const { data: service, error: serviceError } = await getService(serviceId);
+    const { data: categories } = await getServiceCategories();
 
-  if (serviceError || !service) {
+    if (serviceError || !service) {
     console.error('Service error:', serviceError);
     notFound();
-  }
+    }
 
-  // Bind the service ID to the update action
-  const updateServiceWithId = updateService.bind(null, serviceId);
+    // Bind the service ID to the update action
+    const updateServiceWithId = updateService.bind(null, serviceId);
 
-  return (
+    return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">

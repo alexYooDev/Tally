@@ -73,14 +73,14 @@ export function IncomeForm({
         <form ref={formRef} onSubmit={handleSubmit} className='space-y-6'>
             {/* Error Message */}
             {error && (
-                <div className='p-4 bg-red-50 border border-red-200 rounded-lg'>
-                    <p className='text-sm text-red-600'>{error}</p>
+                <div className='p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
+                    <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
                 </div>
             )}
 
             {/* Date */}
             <div>
-                <label htmlFor='date' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='date' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Date *
                 </label>
                 <input
@@ -90,14 +90,14 @@ export function IncomeForm({
                     required
                     defaultValue={initialData?.date || today}
                     max={today}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-3 md:px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                     disabled={loading}
                 />
             </div>
 
             {/* Service Selection */}
             <div>
-                <label htmlFor='service_id' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='service_id' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Service
                 </label>
                 <select
@@ -105,7 +105,7 @@ export function IncomeForm({
                     name='service_id'
                     value={selectedServiceId}
                     onChange={(e) => setSelectedServiceId(e.target.value)}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                     disabled={loading}
                 >
                     <option value=''>Select a service (optional)</option>
@@ -115,14 +115,14 @@ export function IncomeForm({
                         </option>
                     ))}
                 </select>
-                <p className='mt-1 text-xs text-gray-500'>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Optional - selecting a service will auto-fill the price
                 </p>
             </div>
 
             {/* Client Name */}
             <div>
-                <label htmlFor='client_name' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='client_name' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Client Name
                 </label>
                 <input
@@ -131,10 +131,10 @@ export function IncomeForm({
                     name='client_name'
                     defaultValue={initialData?.client_name || ''}
                     placeholder='e.g., Sarah Johnson'
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500'
                     disabled={loading}
                 />
-                <p className='mt-1 text-xs text-gray-500'>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Optional - helps track repeat clients
                 </p>
             </div>
@@ -143,11 +143,11 @@ export function IncomeForm({
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 {/* Price */}
                 <div>
-                    <label htmlFor='price' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='price' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Price *
                     </label>
                     <div className='relative'>
-                        <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500'>
+                        <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400'>
                             $
                         </span>
                         <input
@@ -159,7 +159,7 @@ export function IncomeForm({
                             step='0.01'
                             value={price}
                             onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
-                            className='w-full pl-7 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                            className='w-full pl-7 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                             disabled={loading}
                         />
                     </div>
@@ -167,11 +167,11 @@ export function IncomeForm({
 
                 {/* Discount */}
                 <div>
-                    <label htmlFor='discount' className='block text-sm font-medium text-gray-700 mb-2'>
+                    <label htmlFor='discount' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                         Discount
                     </label>
                     <div className='relative'>
-                        <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500'>
+                        <span className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400'>
                             $
                         </span>
                         <input
@@ -182,7 +182,7 @@ export function IncomeForm({
                             step='0.01'
                             value={discount}
                             onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                            className='w-full pl-7 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                            className='w-full pl-7 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                             disabled={loading}
                         />
                     </div>
@@ -190,12 +190,12 @@ export function IncomeForm({
             </div>
 
             {/* Total Received - Calculated Display */}
-            <div className='bg-indigo-50 border border-indigo-200 rounded-lg p-4'>
+            <div className='bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4'>
                 <div className='flex items-center justify-between'>
-                    <span className='text-sm font-medium text-indigo-900'>
+                    <span className='text-sm font-medium text-indigo-900 dark:text-indigo-200'>
                         Total Received
                     </span>
-                    <span className='text-2xl font-bold text-indigo-600'>
+                    <span className='text-2xl font-bold text-indigo-600 dark:text-indigo-400'>
                         ${totalReceived.toFixed(2)}
                     </span>
                 </div>
@@ -203,7 +203,7 @@ export function IncomeForm({
 
             {/* Payment Method */}
             <div>
-                <label htmlFor='payment_method' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='payment_method' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Payment Method *
                 </label>
                 <select
@@ -211,7 +211,7 @@ export function IncomeForm({
                     name='payment_method'
                     required
                     defaultValue={initialData?.payment_method || ''}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                     disabled={loading}
                 >
                     <option value=''>Select payment method</option>
@@ -225,7 +225,7 @@ export function IncomeForm({
 
             {/* Notes */}
             <div>
-                <label htmlFor='notes' className='block text-sm font-medium text-gray-700 mb-2'>
+                <label htmlFor='notes' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Notes
                 </label>
                 <textarea
@@ -234,20 +234,20 @@ export function IncomeForm({
                     rows={3}
                     defaultValue={initialData?.notes || ''}
                     placeholder='e.g., First time client, referred by Jessica'
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
+                    className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500'
                     disabled={loading}
                 />
-                <p className='mt-1 text-xs text-gray-500'>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Optional - add any additional details
                 </p>
             </div>
 
             {/* Actions */}
-            <div className='flex gap-3 pt-4 border-t border-gray-200'>
+            <div className='flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700'>
                 <button
                     type='submit'
                     disabled={loading}
-                    className='flex-1 bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='flex-1 bg-indigo-600 dark:bg-indigo-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition disabled:opacity-50 disabled:cursor-not-allowed'
                 >
                     {loading ? (
                         <span className='flex items-center justify-center'>
@@ -263,7 +263,7 @@ export function IncomeForm({
                 </button>
                 <a
                     href='/dashboard/income'
-                    className='px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition'
+                    className='px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition'
                 >
                     Cancel
                 </a>

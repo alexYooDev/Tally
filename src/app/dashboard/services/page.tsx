@@ -21,12 +21,12 @@ type Service = {
 
 export default async function ServicesPage() {
     const { data: services, error } = await getServices();
-    
+
     if (error) {
         return (
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-                <div className='bg-red-50 border border-red-200 rounded-lg p-4'>
-                    <p className='text-red-600'>Error loading services: {error}</p>
+                <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
+                    <p className='text-red-600 dark:text-red-400'>Error loading services: {error}</p>
                 </div>
             </div>
         );
@@ -51,14 +51,14 @@ export default async function ServicesPage() {
             {/* Header */}
             <div className='flex items-center justify-between mb-8'>
                 <div>
-                    <h1 className='text-3xl font-bold text-gray-900'>Services</h1>
-                    <p className='text-gray-600 mt-1'>
+                    <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100'>Services</h1>
+                    <p className='text-gray-600 dark:text-gray-400 mt-1'>
                         Manage your services and pricing
                     </p>
                 </div>
-                <Link 
-                    href='/dashboard/services/new' 
-                    className='px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition'
+                <Link
+                    href='/dashboard/services/new'
+                    className='px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition'
                 >
                    + Add Service
                 </Link>
@@ -66,33 +66,33 @@ export default async function ServicesPage() {
             {/* Services List */}
             {!hasServices ? (
                 /* Empty State */
-                <div 
-                    className='bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center'
+                <div
+                    className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center'
                 >
                     <div className='text-6xl mb-4'>📋</div>
-                    <h2 className='text-xl font-semibold text-gray-900 mb-2'>
+                    <h2 className='text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2'>
                         No services yet
                     </h2>
-                    <p className='text-gray-600 mb-6'>
+                    <p className='text-gray-600 dark:text-gray-400 mb-6'>
                         Add your first service to get started.
                     </p>
                     <Link
                         href="/dashboard/services/new"
-                        className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
+                        className="inline-block px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition"
                     >
                         + Add Your First Service
                     </Link>
                     {/* Quick Examples */}
-                    <div className='mt-8 pt-8 border-t border-gray-200'>
-                        <p className='text-sm text-gray-600 mb04'>Examples:</p>
+                    <div className='mt-8 pt-8 border-t border-gray-200 dark:border-gray-700'>
+                        <p className='text-sm text-gray-600 dark:text-gray-400 mb04'>Examples:</p>
                         <div className="flex flex-wrap gap-2 justify-center">
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
                                 Classic Full Set - $150
                             </span>
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
                                 Volume Fill - $80
                             </span>
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
                                 Lash Removal - $30
                             </span>
                         </div>
@@ -101,52 +101,52 @@ export default async function ServicesPage() {
             ) : (
                 <>
                     {/* Desktop Table View - Hidden on Mobile */}
-                    <div className='hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
+                    <div className='hidden md:block bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden'>
                         <table className='w-full'>
-                            <thead className='bg-gray-50 border-b border-gray-200'>
+                            <thead className='bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700'>
                                 <tr>
-                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                                         Service Name
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                                         Category
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                                         Price
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                                         Description
                                     </th>
-                                    <th className='px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    <th className='px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                                         Actions
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className='divide-y divide-gray-200'>
+                            <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
                                 {services?.map((service) => (
-                                    <tr key={service.id} className='hover:bg-gray-50 transition'>
+                                    <tr key={service.id} className='hover:bg-gray-50 dark:hover:bg-gray-700/50 transition'>
                                         <td className='px-6 py-4'>
-                                            <div className='text-sm font-semibold text-gray-900'>
+                                            <div className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
                                                 {service.name}
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
-                                            <span className='px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-700'>
+                                            <span className='px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'>
                                                 {service.category?.name || 'Uncategorized'}
                                             </span>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
-                                            <div className='text-sm font-bold text-indigo-600'>
+                                            <div className='text-sm font-bold text-indigo-600 dark:text-indigo-400'>
                                                 {formatCurrency(service.default_price)}
                                             </div>
                                         </td>
                                         <td className='px-6 py-4'>
                                             {service.description ? (
-                                                <div className='text-sm text-gray-600 line-clamp-2 max-w-xs'>
+                                                <div className='text-sm text-gray-600 dark:text-gray-400 line-clamp-2 max-w-xs'>
                                                     {service.description}
                                                 </div>
                                             ) : (
-                                                <div className='text-sm text-gray-400 italic'>
+                                                <div className='text-sm text-gray-400 dark:text-gray-500 italic'>
                                                     No description
                                                 </div>
                                             )}
@@ -155,7 +155,7 @@ export default async function ServicesPage() {
                                             <div className='flex gap-2 justify-center'>
                                                 <Link
                                                     href={`/dashboard/services/${service.id}/edit`}
-                                                    className='px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition'
+                                                    className='px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition'
                                                 >
                                                     Edit
                                                 </Link>
@@ -176,22 +176,22 @@ export default async function ServicesPage() {
                         {services?.map((service) => (
                             <div
                                 key={service.id}
-                                className='bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                                className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4'
                             >
                                 {/* Header: Service Name and Price */}
                                 <div className='flex items-start justify-between mb-3'>
                                     <div className='flex-1'>
-                                        <div className='text-base font-semibold text-gray-900'>
+                                        <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
                                             {service.name}
                                         </div>
-                                        <div className='text-xs text-gray-500 mt-1'>
-                                            <span className='px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full font-medium'>
+                                        <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
+                                            <span className='px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 rounded-full font-medium'>
                                                 {service.category?.name || 'Uncategorized'}
                                             </span>
                                         </div>
                                     </div>
                                     <div className='text-right ml-4'>
-                                        <div className='text-lg font-bold text-indigo-600'>
+                                        <div className='text-lg font-bold text-indigo-600 dark:text-indigo-400'>
                                             {formatCurrency(service.default_price)}
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@ export default async function ServicesPage() {
 
                                 {/* Description */}
                                 {service.description && (
-                                    <div className='text-sm text-gray-600 mb-3 pb-3 border-b border-gray-100'>
+                                    <div className='text-sm text-gray-600 dark:text-gray-400 mb-3 pb-3 border-b border-gray-100 dark:border-gray-700'>
                                         {service.description}
                                     </div>
                                 )}
@@ -208,7 +208,7 @@ export default async function ServicesPage() {
                                 <div className='flex gap-2'>
                                     <Link
                                         href={`/dashboard/services/${service.id}/edit`}
-                                        className='flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition text-center'
+                                        className='flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition text-center'
                                     >
                                         Edit
                                     </Link>
@@ -225,15 +225,15 @@ export default async function ServicesPage() {
 
             {/* Summary */}
             {hasServices && (
-                <div className="mt-8 bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                <div className="mt-8 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <span className="text-2xl">📊</span>
                             <div>
-                                <p className="text-sm font-medium text-indigo-900">
+                                <p className="text-sm font-medium text-indigo-900 dark:text-indigo-200">
                                     {services.length} service{services.length !== 1 ? 's' : ''} total
                                 </p>
-                                <p className="text-xs text-indigo-700">
+                                <p className="text-xs text-indigo-700 dark:text-indigo-400">
                                     {Object.keys(groupedServices).length} categor{Object.keys(groupedServices).length !== 1 ? 'ies' : 'y'}
                                 </p>
                             </div>
