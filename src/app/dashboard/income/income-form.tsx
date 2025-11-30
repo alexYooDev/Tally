@@ -70,7 +70,7 @@ export function IncomeForm({
     }
 
     return (
-        <form ref={formRef} onSubmit={handleSubmit} className='space-y-6'>
+        <form ref={formRef} onSubmit={handleSubmit} className='space-y-6 dark:bg-gray-800 dark:text-gray-100'>
             {/* Error Message */}
             {error && (
                 <div className='p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
@@ -80,7 +80,7 @@ export function IncomeForm({
 
             {/* Date */}
             <div>
-                <label htmlFor='date' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
+                <label htmlFor='date' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 dark:text-gray-100'>
                     Date *
                 </label>
                 <input

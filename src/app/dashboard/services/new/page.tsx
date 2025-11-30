@@ -16,18 +16,18 @@ export default async function NewServicePage() {
             <div className='mb-8'>
                 <Link
                     href='/dashboard/services'
-                    className='text-sm text-indigo-600 hover:text-indigo-700 font-medium mb-4 inline-block'
+                    className='text-sm text-indigo-600 hover:text-indigo-700 font-medium mb-4 inline-block dark:text-indigo-400 dark:hover:text-indigo-300'
                 >
                     <ArrowLeftIcon className='inline w-4 h-4 mr-2' />
                     Back to Services
                 </Link>
-                <h1 className='text-3xl font-bold text-gray-900'>Add New Service</h1>
-                <p className='text-gray-600 mt-1'>
+                <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>Add New Service</h1>
+                <p className='text-gray-600 mt-1 dark:text-gray-400'>
                     Create a new service for your business
                 </p>
             </div>
             {/* Form */}
-            <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-8'>
+            <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-8 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'>
                 <ServiceForm
                     action={createService}
                     existingCategories={categories || []}
@@ -35,12 +35,12 @@ export default async function NewServicePage() {
                 />
             </div>
             {/* Tips */}
-            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 dark:bg-blue-900/20 dark:border-blue-800">
                 <div className="flex items-start">
                     <span className="text-2xl mr-3">💡</span>
                     <div className="flex-1">
-                        <p className="text-sm font-medium text-blue-900 mb-1">Tips:</p>
-                        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                        <p className="text-sm font-medium text-blue-900 mb-1 dark:text-blue-400">Tips:</p>
+                        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside dark:text-blue-400">
                             <li>Use clear, descriptive names (e.g., "Classic Full Set" not "CFS")</li>
                             <li>Categories help organize services (e.g., "Lash Extensions", "Tinting")</li>
                             <li>Set your regular price - you can discount later when logging income</li>

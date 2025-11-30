@@ -52,7 +52,7 @@ export default async function DashboardLayout({
                                     Income
                                 </Link>
                                 <Link
-                                    href='/dashboard/spending'
+                                    href='#'
                                     className='text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition'
                                 >
                                     Spending (Soon)
