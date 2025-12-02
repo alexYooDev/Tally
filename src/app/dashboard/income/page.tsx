@@ -1,19 +1,26 @@
 import Link from 'next/link';
 import { getIncomeTransactions } from './actions';
-import { DeleteIncomeButton } from './delete-button';
+import { IncomeActionsMenu } from './actions-menu';
 import { formatCurrency } from '@/lib/utils';
 import type { IncomeTransactionWithService } from '@/types/supabase';
+import {
+    PageContainer,
+    PageHeader,
+    ErrorAlert,
+    SummaryCard,
+    EmptyState,
+    Badge,
+    getPaymentMethodBadgeVariant,
+} from '@/components';
 
 export default async function IncomePage() {
     const { data: transactions, error } = await getIncomeTransactions();
 
     if (error) {
         return (
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-                <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
-                    <p className='text-red-600 dark:text-red-400'>Error loading income transactions: {error}</p>
-                </div>
-            </div>
+            <PageContainer>
+                <ErrorAlert>Error loading income transactions: {error}</ErrorAlert>
+            </PageContainer>
         );
     }
 
@@ -33,102 +40,51 @@ export default async function IncomePage() {
         });
     };
 
-    // Get payment method badge color
-    const getPaymentMethodBadge = (method: string) => {
-        const badges: Record<string, string> = {
-            cash: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-            card: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
-            bank_transfer: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400',
-            paypal: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400',
-            other: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
-        };
-        return badges[method] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
-    };
-
     return (
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-            {/* Header */}
-            <div className='flex items-center justify-between mb-8'>
-                <div>
-                    <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100'>Income</h1>
-                    <p className='text-gray-600 dark:text-gray-400 mt-1'>
-                        Track your income and earnings
-                    </p>
-                </div>
-                <Link
-                    href='/dashboard/income/new'
-                    className='px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition'
-                >
-                    + Log Income
-                </Link>
-            </div>
+        <PageContainer>
+            <PageHeader
+                title="Income"
+                description="Track your income and earnings"
+                actionLabel="+ Log Income"
+                actionHref="/dashboard/income/new"
+            />
 
             {/* Summary Cards - Horizontal on mobile */}
             {hasTransactions && (
                 <div className='grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 mb-8'>
-                    <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-6'>
-                        <p className='text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1'>
-                            <span className='md:hidden'>Total Inc.</span>
-                            <span className='hidden md:inline'>Total Income</span>
-                        </p>
-                        <p className='text-lg md:text-3xl font-bold text-indigo-600 dark:text-indigo-400'>
-                            {formatCurrency(totalIncome)}
-                        </p>
-                    </div>
-                    <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-6'>
-                        <p className='text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1'>
-                            <span className='md:hidden'>Transaction</span>
-                            <span className='hidden md:inline'>Transactions</span>
-                        </p>
-                        <p className='text-lg md:text-3xl font-bold text-gray-900 dark:text-gray-100'>
-                            {transactionCount}
-                        </p>
-                    </div>
-                    <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-6'>
-                        <p className='text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1'>
-                            <span className='md:hidden'>Avg Inc.</span>
-                            <span className='hidden md:inline'>Average Transaction</span>
-                        </p>
-                        <p className='text-lg md:text-3xl font-bold text-gray-900 dark:text-gray-100'>
-                            {formatCurrency(totalIncome / transactionCount)}
-                        </p>
-                    </div>
+                    <SummaryCard
+                        title="Total Income"
+                        shortTitle="Total Inc."
+                        value={formatCurrency(totalIncome)}
+                        valueColor="text-indigo-600 dark:text-indigo-400"
+                    />
+                    <SummaryCard
+                        title="Transactions"
+                        shortTitle="Transaction"
+                        value={transactionCount}
+                    />
+                    <SummaryCard
+                        title="Average Transaction"
+                        shortTitle="Avg Inc."
+                        value={formatCurrency(totalIncome / transactionCount)}
+                    />
                 </div>
             )}
 
             {/* Income List */}
             {!hasTransactions ? (
-                /* Empty State */
-                <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center'>
-                    <div className='text-6xl mb-4'>💰</div>
-                    <h2 className='text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-                        No income logged yet
-                    </h2>
-                    <p className='text-gray-600 dark:text-gray-400 mb-6'>
-                        Start tracking your income by logging your first transaction.
-                    </p>
-                    <Link
-                        href='/dashboard/income/new'
-                        className='inline-block px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition'
-                    >
-                        + Log Your First Income
-                    </Link>
-                    {/* Quick Examples */}
-                    <div className='mt-8 pt-8 border-t border-gray-200 dark:border-gray-700'>
-                        <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>Examples:</p>
-                        <div className='flex flex-wrap gap-2 justify-center'>
-                            <span className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm'>
-                                Classic Full Set - $150
-                            </span>
-                            <span className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm'>
-                                Volume Fill - $80
-                            </span>
-                            <span className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm'>
-                                Consultation - $50
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <EmptyState
+                    icon="💰"
+                    title="No income logged yet"
+                    description="Start tracking your income by logging your first transaction."
+                    actionLabel="+ Log Your First Income"
+                    actionHref="/dashboard/income/new"
+                    examples={[
+                        'Classic Full Set - $150',
+                        'Volume Fill - $80',
+                        'Consultation - $50',
+                    ]}
+                />
             ) : (
                 <>
                     {/* Desktop Table View - Hidden on Mobile */}
@@ -177,9 +133,9 @@ export default async function IncomePage() {
                                             )}
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
-                                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPaymentMethodBadge(transaction.payment_method)}`}>
+                                            <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
                                                 {transaction.payment_method.replace('_', ' ')}
-                                            </span>
+                                            </Badge>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap text-left'>
                                             <div className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
@@ -191,15 +147,9 @@ export default async function IncomePage() {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
-                                            <div className='flex gap-2 justify-end'>
-                                                <Link
-                                                    href={`/dashboard/income/${transaction.id}/edit`}
-                                                    className='px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition'
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <DeleteIncomeButton
+                                        <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
+                                            <div className='flex justify-end items-start'>
+                                                <IncomeActionsMenu
                                                     transactionId={transaction.id}
                                                     transactionLabel={transaction.service?.name || formatDate(transaction.date)}
                                                 />
@@ -216,10 +166,18 @@ export default async function IncomePage() {
                         {transactions?.map((transaction) => (
                             <div
                                 key={transaction.id}
-                                className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4'
+                                className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 relative'
                             >
+                                {/* Actions - Top Right */}
+                                <div className='absolute top-2 right-2'>
+                                    <IncomeActionsMenu
+                                        transactionId={transaction.id}
+                                        transactionLabel={transaction.service?.name || formatDate(transaction.date)}
+                                    />
+                                </div>
+
                                 {/* Header: Date and Amount */}
-                                <div className='flex items-start justify-between mb-3'>
+                                <div className='flex items-start justify-between mb-3 pr-8'>
                                     <div className='flex-1'>
                                         <div className='text-xs text-gray-500 dark:text-gray-400 mb-1'>
                                             {formatDate(transaction.date)}
@@ -247,36 +205,22 @@ export default async function IncomePage() {
 
                                 {/* Payment Method Badge */}
                                 <div className='mb-3'>
-                                    <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${getPaymentMethodBadge(transaction.payment_method)}`}>
+                                    <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
                                         {transaction.payment_method.replace('_', ' ')}
-                                    </span>
+                                    </Badge>
                                 </div>
 
                                 {/* Notes */}
                                 {transaction.notes && (
-                                    <div className='text-sm text-gray-600 dark:text-gray-400 mb-3 pb-3 border-b border-gray-100 dark:border-gray-700'>
+                                    <div className='text-sm text-gray-600 dark:text-gray-400'>
                                         {transaction.notes}
                                     </div>
                                 )}
-
-                                {/* Actions */}
-                                <div className='flex gap-2'>
-                                    <Link
-                                        href={`/dashboard/income/${transaction.id}/edit`}
-                                        className='flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition text-center'
-                                    >
-                                        Edit
-                                    </Link>
-                                    <DeleteIncomeButton
-                                        transactionId={transaction.id}
-                                        transactionLabel={transaction.service?.name || formatDate(transaction.date)}
-                                    />
-                                </div>
                             </div>
                         ))}
                     </div>
                 </>
             )}
-        </div>
+        </PageContainer>
     );
 }

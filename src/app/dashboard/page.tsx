@@ -5,6 +5,7 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
+import { PageContainer, StatCard } from '@/components';
 
 export default async function DashboardPage() {
     const supabase = await createClient();
@@ -23,7 +24,7 @@ export default async function DashboardPage() {
     const incomeCount = incomeData?.length || 0;
 
     return (
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+      <PageContainer>
         {/* Welcome Section */}
         <div className='mb-8'>
             <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
@@ -35,49 +36,27 @@ export default async function DashboardPage() {
         </div>
         {/* Quick Stats Grid */}
         <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-8'>
-
-            {/* Income Card */}
-            <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6'>
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                        Total Income
-                    </h3>
-                    <span className='text-2xl'>💰</span>
-                </div>
-                <p className='text-3xl font-bold text-green-600 dark:text-green-400'>{formatCurrency(totalIncome)}</p>
-                <p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>
-                    {incomeCount > 0 ? `${incomeCount} transaction${incomeCount !== 1 ? 's' : ''}` : 'No transactions yet'}
-                </p>
-            </div>
-            {/* Spending Card */}
-            <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6'>
-                <div className='flex items-center justify-between mb-4'>
-                    <h3 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                        Total Spending
-                    </h3>
-                    <span className='text-2xl'>💸</span>
-                </div>
-                <p className='text-3xl font-bold text-red-600 dark:text-red-400'>{formatCurrency(totalSpending)}</p>
-                <p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>
-                    Feature coming soon
-                </p>
-            </div>
-
-            {/* Net Profit Card */}
-            <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6'>
-                <div className='flex items-center justify-between mb-4'>
-                    <h3 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                        Net Profit
-                    </h3>
-                    <span className='text-2xl'>🤑</span>
-                </div>
-                <p className={`text-3xl font-bold ${netProfit >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400'}`}>
-                    {formatCurrency(netProfit)}
-                </p>
-                <p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>
-                    {incomeCount > 0 ? 'Income - Spending' : 'Start tracking today!'}
-                </p>
-            </div>
+            <StatCard
+                label="Total Income"
+                value={formatCurrency(totalIncome)}
+                icon="💰"
+                description={incomeCount > 0 ? `${incomeCount} transaction${incomeCount !== 1 ? 's' : ''}` : 'No transactions yet'}
+                valueColor="text-green-600 dark:text-green-400"
+            />
+            <StatCard
+                label="Total Spending"
+                value={formatCurrency(totalSpending)}
+                icon="💸"
+                description="Feature coming soon"
+                valueColor="text-red-600 dark:text-red-400"
+            />
+            <StatCard
+                label="Net Profit"
+                value={formatCurrency(netProfit)}
+                icon="🤑"
+                description={incomeCount > 0 ? 'Income - Spending' : 'Start tracking today!'}
+                valueColor={netProfit >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400'}
+            />
         </div>
         
         {/* Getting Started */}
@@ -158,6 +137,6 @@ export default async function DashboardPage() {
             User ID: <span className="font-mono text-xs">{user?.id}</span>
             </p>
         </div>
-      </div> 
+      </PageContainer>
     );
 }
