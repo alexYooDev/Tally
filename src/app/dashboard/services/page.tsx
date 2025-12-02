@@ -1,7 +1,15 @@
 import Link from 'next/link';
 import { getServices } from './actions';
-import { DeleteServiceButton } from './delete-button';
+import { ServiceActionsMenu } from './actions-menu';
 import { formatCurrency } from '@/lib/utils';
+import {
+    PageContainer,
+    PageHeader,
+    ErrorAlert,
+    EmptyState,
+    Badge,
+    InfoAlert,
+} from '@/components';
 
 type Category = {
     id: string;
@@ -24,11 +32,9 @@ export default async function ServicesPage() {
 
     if (error) {
         return (
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-                <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
-                    <p className='text-red-600 dark:text-red-400'>Error loading services: {error}</p>
-                </div>
-            </div>
+            <PageContainer>
+                <ErrorAlert>Error loading services: {error}</ErrorAlert>
+            </PageContainer>
         );
     }
 
@@ -47,57 +53,27 @@ export default async function ServicesPage() {
     const hasServices = services && services.length > 0;
 
     return (
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-            {/* Header */}
-            <div className='flex items-center justify-between mb-8'>
-                <div>
-                    <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100'>Services</h1>
-                    <p className='text-gray-600 dark:text-gray-400 mt-1'>
-                        Manage your services and pricing
-                    </p>
-                </div>
-                <Link
-                    href='/dashboard/services/new'
-                    className='px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition'
-                >
-                   + Add Service
-                </Link>
-            </div>
+        <PageContainer>
+            <PageHeader
+                title="Services"
+                description="Manage your services and pricing"
+                actionLabel="+ Add Service"
+                actionHref="/dashboard/services/new"
+            />
             {/* Services List */}
             {!hasServices ? (
-                /* Empty State */
-                <div
-                    className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center'
-                >
-                    <div className='text-6xl mb-4'>📋</div>
-                    <h2 className='text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-                        No services yet
-                    </h2>
-                    <p className='text-gray-600 dark:text-gray-400 mb-6'>
-                        Add your first service to get started.
-                    </p>
-                    <Link
-                        href="/dashboard/services/new"
-                        className="inline-block px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition"
-                    >
-                        + Add Your First Service
-                    </Link>
-                    {/* Quick Examples */}
-                    <div className='mt-8 pt-8 border-t border-gray-200 dark:border-gray-700'>
-                        <p className='text-sm text-gray-600 dark:text-gray-400 mb04'>Examples:</p>
-                        <div className="flex flex-wrap gap-2 justify-center">
-                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
-                                Classic Full Set - $150
-                            </span>
-                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
-                                Volume Fill - $80
-                            </span>
-                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
-                                Lash Removal - $30
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <EmptyState
+                    icon="📋"
+                    title="No services yet"
+                    description="Add your first service to get started."
+                    actionLabel="+ Add Your First Service"
+                    actionHref="/dashboard/services/new"
+                    examples={[
+                        'Classic Full Set - $150',
+                        'Volume Fill - $80',
+                        'Lash Removal - $30',
+                    ]}
+                />
             ) : (
                 <>
                     {/* Desktop Table View - Hidden on Mobile */}
@@ -131,9 +107,9 @@ export default async function ServicesPage() {
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
-                                            <span className='px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'>
+                                            <Badge variant="primary">
                                                 {service.category?.name || 'Uncategorized'}
-                                            </span>
+                                            </Badge>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='text-sm font-bold text-indigo-600 dark:text-indigo-400'>
@@ -151,15 +127,9 @@ export default async function ServicesPage() {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className='px-6 py-4 whitespace-nowrap text-center'>
-                                            <div className='flex gap-2 justify-center'>
-                                                <Link
-                                                    href={`/dashboard/services/${service.id}/edit`}
-                                                    className='px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition'
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <DeleteServiceButton
+                                        <td className='px-6 py-4 whitespace-nowrap'>
+                                            <div className='flex justify-end items-start'>
+                                                <ServiceActionsMenu
                                                     serviceId={service.id}
                                                     serviceName={service.name}
                                                 />
@@ -176,18 +146,26 @@ export default async function ServicesPage() {
                         {services?.map((service) => (
                             <div
                                 key={service.id}
-                                className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4'
+                                className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 relative'
                             >
+                                {/* Actions - Top Right */}
+                                <div className='absolute top-2 right-2'>
+                                    <ServiceActionsMenu
+                                        serviceId={service.id}
+                                        serviceName={service.name}
+                                    />
+                                </div>
+
                                 {/* Header: Service Name and Price */}
-                                <div className='flex items-start justify-between mb-3'>
+                                <div className='flex items-start justify-between mb-3 pr-8'>
                                     <div className='flex-1'>
                                         <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
                                             {service.name}
                                         </div>
                                         <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                                            <span className='px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 rounded-full font-medium'>
+                                            <Badge variant="primary">
                                                 {service.category?.name || 'Uncategorized'}
-                                            </span>
+                                            </Badge>
                                         </div>
                                     </div>
                                     <div className='text-right ml-4'>
@@ -199,24 +177,10 @@ export default async function ServicesPage() {
 
                                 {/* Description */}
                                 {service.description && (
-                                    <div className='text-sm text-gray-600 dark:text-gray-400 mb-3 pb-3 border-b border-gray-100 dark:border-gray-700'>
+                                    <div className='text-sm text-gray-600 dark:text-gray-400'>
                                         {service.description}
                                     </div>
                                 )}
-
-                                {/* Actions */}
-                                <div className='flex gap-2'>
-                                    <Link
-                                        href={`/dashboard/services/${service.id}/edit`}
-                                        className='flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition text-center'
-                                    >
-                                        Edit
-                                    </Link>
-                                    <DeleteServiceButton
-                                        serviceId={service.id}
-                                        serviceName={service.name}
-                                    />
-                                </div>
                             </div>
                         ))}
                     </div>
@@ -225,22 +189,20 @@ export default async function ServicesPage() {
 
             {/* Summary */}
             {hasServices && (
-                <div className="mt-8 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <span className="text-2xl">📊</span>
-                            <div>
-                                <p className="text-sm font-medium text-indigo-900 dark:text-indigo-200">
-                                    {services.length} service{services.length !== 1 ? 's' : ''} total
-                                </p>
-                                <p className="text-xs text-indigo-700 dark:text-indigo-400">
-                                    {Object.keys(groupedServices).length} categor{Object.keys(groupedServices).length !== 1 ? 'ies' : 'y'}
-                                </p>
-                            </div>
+                <InfoAlert className="mt-8">
+                    <div className="flex items-center gap-2">
+                        <span className="text-2xl">📊</span>
+                        <div>
+                            <p className="font-medium">
+                                {services.length} service{services.length !== 1 ? 's' : ''} total
+                            </p>
+                            <p className="text-xs">
+                                {Object.keys(groupedServices).length} categor{Object.keys(groupedServices).length !== 1 ? 'ies' : 'y'}
+                            </p>
                         </div>
                     </div>
-                </div>
+                </InfoAlert>
             )}
-        </div>
+        </PageContainer>
     );
 }
