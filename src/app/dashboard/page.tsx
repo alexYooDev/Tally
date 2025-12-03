@@ -17,11 +17,17 @@ export default async function DashboardPage() {
         .select('total_received')
         .eq('user_id', user?.id || '');
 
+    const { data: spendingData } = await supabase
+        .from('spending_transactions')
+        .select('amount')
+        .eq('user_id', user?.id || '');
+
     // Calculate totals
     const totalIncome = (incomeData as { total_received: number }[] | null)?.reduce((sum, t) => sum + t.total_received, 0) || 0;
-    const totalSpending = 0; // Placeholder until spending feature is implemented
+    const totalSpending = (spendingData as { amount: number }[] | null)?.reduce((sum, t) => sum + t.amount, 0) || 0;
     const netProfit = totalIncome - totalSpending;
     const incomeCount = incomeData?.length || 0;
+    const spendingCount = spendingData?.length || 0;
 
     return (
       <PageContainer>
@@ -47,13 +53,13 @@ export default async function DashboardPage() {
                 label="Total Spending"
                 value={formatCurrency(totalSpending)}
                 icon="💸"
-                description="Feature coming soon"
+                description={spendingCount > 0 ? `${spendingCount} transaction${spendingCount !== 1 ? 's' : ''}` : 'No transactions yet'}
                 valueColor="text-red-600 dark:text-red-400"
             />
             <StatCard
                 label="Net Profit"
                 value={formatCurrency(netProfit)}
-                icon="🤑"
+                icon={ netProfit > 0 ? "🤑" : "🫩"}
                 description={incomeCount > 0 ? 'Income - Spending' : 'Start tracking today!'}
                 valueColor={netProfit >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400'}
             />
@@ -106,7 +112,7 @@ export default async function DashboardPage() {
                         Record business expenses and supplies
                     </p>
                     <button className="text-sm text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-700 dark:hover:text-indigo-300 cursor-pointer">
-                        Coming soon →
+                        Go to my spending →
                     </button>
                 </div>
 

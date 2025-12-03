@@ -159,6 +159,40 @@ export async function getServiceCategories() {
     return { data: data || [] };
     }
 
+/**
+ * Delete a category by ID
+ */
+export async function deleteCategory(categoryId: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'Not authenticated' };
+    }
+
+    // Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(categoryId)) {
+        return { error: 'Invalid category ID format' };
+    }
+
+    // Delete the category - foreign key constraints will handle related records
+    const { error } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', categoryId)
+        .eq('user_id', user.id)
+        .eq('type', 'service');
+
+    if (error) {
+        console.error('Error deleting category:', error);
+        return { error: error.message };
+    }
+
+    revalidatePath('/dashboard/services');
+    revalidatePath('/dashboard/services/new');
+    return { success: true };
+}
 
 /**
  * Create or get a category by name

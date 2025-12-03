@@ -22,3 +22,9 @@ export { LoadingSpinner } from './loading-spinner';
 // Page components
 export { PageContainer } from './page-container';
 export { PageHeader } from './page-header';
+
+// Category select
+export { CategorySelectWithDelete } from './category-select-with-delete';
+
+// Mobile navigation
+export { MobileNav } from './mobile-nav';

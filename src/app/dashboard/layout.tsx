@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { logout } from '@/app/(auth)/actions';
 import Link from 'next/link';
+import { MobileNav } from '@/components';
 
 export default async function DashboardLayout({
     children
@@ -52,15 +53,15 @@ export default async function DashboardLayout({
                                     Income
                                 </Link>
                                 <Link
-                                    href='#'
+                                    href='/dashboard/spending'
                                     className='text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition'
                                 >
-                                    Spending (Soon)
+                                    Spending
                                 </Link>
                             </div>
                         </div>
-                        {/* User Menu */}
-                        <div className='flex items-center gap-4'>
+                        {/* User Menu - Desktop */}
+                        <div className='hidden md:flex items-center gap-4'>
                             <span className='text-sm text-gray-600 dark:text-gray-400'>
                                 {user.email}
                             </span>
@@ -73,6 +74,9 @@ export default async function DashboardLayout({
                                 </button>
                             </form>
                         </div>
+
+                        {/* Mobile Menu */}
+                        <MobileNav userEmail={user.email || ''} logoutAction={logout} />
                     </div>
                 </div>
             </nav>
