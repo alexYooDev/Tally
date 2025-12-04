@@ -183,8 +183,8 @@ bun dev
 - [ ] Dashboard analytics with charts and graphs
 - [ ] Export data to CSV/PDF
 - [ ] Category management page
-- [ ] Date range filtering
-- [ ] Search and advanced filtering
+- [X] Date range filtering
+- [X] Search and advanced filtering
 - [ ] Multi-currency support
 - [ ] Recurring transactions
 - [ ] Client management system
