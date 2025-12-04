@@ -104,8 +104,9 @@ export type ServiceWithCategory = {
 export type ServiceMinimal = {
     id: string;
     name: string;
-    category: { id: string, name: string }; 
     default_price: number;
+    categories?: CategoryMinimal | CategoryMinimal[] | null; // From Supabase join
+    category?: { id: string, name: string } | null; // Transformed field
 };
 
 /**
