@@ -160,7 +160,32 @@ export async function getServiceCategories() {
     }
 
 /**
- * Delete a category by ID
+ * Check how many services use a specific category
+ */
+export async function checkCategoryUsage(categoryId: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'Not authenticated' };
+    }
+
+    const { count, error } = await supabase
+        .from('services')
+        .select('*', { count: 'exact', head: true })
+        .eq('category_id', categoryId)
+        .eq('user_id', user.id);
+
+    if (error) {
+        console.error('Error checking category usage:', error);
+        return { error: error.message };
+    }
+
+    return { count: count || 0 };
+}
+
+/**
+ * Delete a category by ID (with usage check)
  */
 export async function deleteCategory(categoryId: string) {
     const supabase = await createClient();
@@ -176,7 +201,20 @@ export async function deleteCategory(categoryId: string) {
         return { error: 'Invalid category ID format' };
     }
 
-    // Delete the category - foreign key constraints will handle related records
+    // Check if category is in use
+    const usageCheck = await checkCategoryUsage(categoryId);
+    if (usageCheck.error) {
+        return { error: usageCheck.error };
+    }
+
+    if (usageCheck.count && usageCheck.count > 0) {
+        return {
+            error: `Cannot delete category: ${usageCheck.count} service(s) are using this category. Please reassign or delete those services first.`,
+            count: usageCheck.count
+        };
+    }
+
+    // Delete the category (only if not in use)
     const { error } = await supabase
         .from('categories')
         .delete()

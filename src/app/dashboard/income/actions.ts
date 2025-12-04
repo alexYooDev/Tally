@@ -31,7 +31,11 @@ export async function getIncomeTransactions() {
             services!service_id(
                 id,
                 name,
-                default_price
+                default_price,
+                categories!category_id(
+                    id,
+                    name
+                )
             )
         `)
         .eq('user_id', user.id)
@@ -49,6 +53,11 @@ export async function getIncomeTransactions() {
             ? transaction.services[0]
             : transaction.services;
 
+        // Extract category data from the nested structure
+        const categoryData = serviceData?.categories
+            ? (Array.isArray(serviceData.categories) ? serviceData.categories[0] : serviceData.categories)
+            : null;
+
         return {
             id: transaction.id,
             user_id: transaction.user_id,
@@ -61,7 +70,12 @@ export async function getIncomeTransactions() {
             payment_method: transaction.payment_method,
             notes: transaction.notes,
             service: serviceData
-                ? { id: serviceData.id, name: serviceData.name, default_price: serviceData.default_price }
+                ? {
+                    id: serviceData.id,
+                    name: serviceData.name,
+                    default_price: serviceData.default_price,
+                    category: categoryData ? { id: categoryData.id, name: categoryData.name } : null
+                }
                 : null,
         };
     });
@@ -100,7 +114,11 @@ export async function getIncomeTransaction(id: string) {
             services!service_id(
                 id,
                 name,
-                default_price
+                default_price,
+                categories!category_id(
+                    id,
+                    name
+                )
             )
         `)
         .eq('id', id)
@@ -122,6 +140,11 @@ export async function getIncomeTransaction(id: string) {
         ? rawData.services[0]
         : rawData.services;
 
+    // Extract category data from the nested structure
+    const categoryData = serviceData?.categories
+        ? (Array.isArray(serviceData.categories) ? serviceData.categories[0] : serviceData.categories)
+        : null;
+
     const transformedData: IncomeTransactionWithService = {
         id: rawData.id,
         user_id: rawData.user_id,
@@ -134,7 +157,12 @@ export async function getIncomeTransaction(id: string) {
         payment_method: rawData.payment_method,
         notes: rawData.notes,
         service: serviceData
-            ? { id: serviceData.id, name: serviceData.name, default_price: serviceData.default_price }
+            ? {
+                id: serviceData.id,
+                name: serviceData.name,
+                default_price: serviceData.default_price,
+                category: categoryData ? { id: categoryData.id, name: categoryData.name } : null
+            }
             : null,
     };
 

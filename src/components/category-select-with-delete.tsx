@@ -58,11 +58,16 @@ export function CategorySelectWithDelete({
     async function handleDelete(e: React.MouseEvent, categoryId: string, categoryName: string) {
         e.stopPropagation();
 
-        if (window.confirm(`Are you sure you want to delete the category "${categoryName}"? This will remove it from all associated records.`)) {
-            await onDelete(categoryId);
-            // If the deleted category was selected, clear the input
-            if (value === categoryName) {
-                onChange('');
+        if (window.confirm(`Are you sure you want to delete the category "${categoryName}"?`)) {
+            try {
+                await onDelete(categoryId);
+                // If the deleted category was selected, clear the input
+                if (value === categoryName) {
+                    onChange('');
+                }
+            } catch (error) {
+                // Error will be shown by the parent component
+                console.error('Failed to delete category:', error);
             }
         }
     }

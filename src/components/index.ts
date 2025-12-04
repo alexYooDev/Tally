@@ -28,3 +28,6 @@ export { CategorySelectWithDelete } from './category-select-with-delete';
 
 // Mobile navigation
 export { MobileNav } from './mobile-nav';
+
+// Transaction filters
+export { TransactionFilters, type FilterState } from './transaction-filters';
