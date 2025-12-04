@@ -3,7 +3,7 @@
 // ================================================
 'use client';
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, PieLabelRenderProps } from 'recharts';
 import type { CategoryData } from '@/lib/analytics';
 import { formatCurrency } from '@/lib/utils';
 
@@ -48,8 +48,10 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
     };
 
     // Custom label renderer
-    const renderLabel = (entry: CategoryData) => {
-        return `${entry.percentage.toFixed(0)}%`;
+    const renderLabel = (props: PieLabelRenderProps) => {
+        // Recharts provides percent as a decimal (0.15 = 15%)
+        const percentage = ((props.percent ?? 0) * 100).toFixed(0);
+        return `${percentage}%`;
     };
 
     if (data.length === 0) {
