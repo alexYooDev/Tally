@@ -4,9 +4,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatTransactionDate } from '@/lib/utils';
 import type { CashFlowTransaction } from './actions';
-import { Badge, getPaymentMethodBadgeVariant } from '@/components';
+import { Badge, getPaymentMethodBadgeVariant, SummaryCard, Pagination, usePagination, TransactionTable, type TableColumn, SummaryCardGrid, FilterTabs, type FilterTab } from '@/components';
 
 interface CashFlowProps {
     transactions: CashFlowTransaction[];
@@ -43,252 +43,228 @@ export function CashFlow({ transactions }: CashFlowProps) {
         return withBalance.reverse();
     }, [filteredTransactions]);
 
-    // Format date for display
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-AU', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
-    };
-
     const totalIncome = transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
     const totalSpending = transactions.filter((t) => t.type === 'spending').reduce((sum, t) => sum + t.amount, 0);
     const netCashFlow = totalIncome - totalSpending;
 
+    // Pagination
+    const { currentPage, totalPages, setCurrentPage, paginateItems, itemsPerPage } = usePagination(
+        transactionsWithBalance.length,
+        15 // Show 15 transactions per page
+    );
+    const paginatedTransactions = paginateItems(transactionsWithBalance);
+
+    // Table columns configuration
+    const columns: TableColumn<typeof transactionsWithBalance[0]>[] = [
+        {
+            header: 'Date',
+            render: (transaction) => (
+                <div className='text-sm text-gray-900 dark:text-gray-100'>
+                    {formatTransactionDate(transaction.date)}
+                </div>
+            ),
+        },
+        {
+            header: 'Type',
+            render: (transaction) => (
+                <Badge variant={transaction.type === 'income' ? 'success' : 'danger'}>
+                    {transaction.type}
+                </Badge>
+            ),
+        },
+        {
+            header: 'Description',
+            render: (transaction) => (
+                <>
+                    <div className='text-sm text-gray-900 dark:text-gray-100 font-medium'>
+                        {transaction.description}
+                    </div>
+                    {transaction.category && (
+                        <div className='text-xs text-gray-500 dark:text-gray-400'>
+                            {transaction.category}
+                        </div>
+                    )}
+                    {transaction.notes && (
+                        <div className='text-xs text-gray-400 dark:text-gray-500 mt-1 line-clamp-1'>
+                            {transaction.notes}
+                        </div>
+                    )}
+                </>
+            ),
+        },
+        {
+            header: 'Payment',
+            render: (transaction) => (
+                <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
+                    {transaction.payment_method.replace('_', ' ')}
+                </Badge>
+            ),
+        },
+        {
+            header: 'Amount',
+            align: 'right',
+            render: (transaction) => (
+                <div className={`text-sm font-semibold ${
+                    transaction.type === 'income'
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-red-600 dark:text-red-400'
+                }`}>
+                    {transaction.type === 'income' ? '+' : '-'}
+                    {formatCurrency(transaction.amount)}
+                </div>
+            ),
+        },
+        {
+            header: 'Balance',
+            align: 'right',
+            render: (transaction) => (
+                <div className={`text-sm font-semibold ${
+                    transaction.balance >= 0
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : 'text-red-600 dark:text-red-400'
+                }`}>
+                    {formatCurrency(transaction.balance)}
+                </div>
+            ),
+        },
+    ];
+
+    // Mobile card renderer
+    const renderMobileCard = (transaction: typeof transactionsWithBalance[0]) => (
+        <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4'>
+            {/* Header: Date and Amount */}
+            <div className='flex items-start justify-between mb-3'>
+                <div className='flex-1'>
+                    <div className='text-xs text-gray-500 dark:text-gray-400 mb-1'>
+                        {formatTransactionDate(transaction.date)}
+                    </div>
+                    <div className='flex items-center gap-2 mb-1'>
+                        <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
+                            {transaction.description}
+                        </div>
+                        <Badge
+                            variant={transaction.type === 'income' ? 'success' : 'danger'}
+                            className='shrink-0'
+                        >
+                            {transaction.type}
+                        </Badge>
+                    </div>
+                    {transaction.category && (
+                        <div className='text-sm text-gray-600 dark:text-gray-400'>
+                            {transaction.category}
+                        </div>
+                    )}
+                </div>
+                <div className='text-right ml-4'>
+                    <div className={`text-lg font-bold ${
+                        transaction.type === 'income'
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400'
+                    }`}>
+                        {transaction.type === 'income' ? '+' : '-'}
+                        {formatCurrency(transaction.amount)}
+                    </div>
+                    <div className={`text-xs mt-1 ${
+                        transaction.balance >= 0
+                            ? 'text-blue-600 dark:text-blue-400'
+                            : 'text-red-600 dark:text-red-400'
+                    }`}>
+                        Bal: {formatCurrency(transaction.balance)}
+                    </div>
+                </div>
+            </div>
+
+            {/* Payment Method Badge */}
+            <div className='mb-3'>
+                <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
+                    {transaction.payment_method.replace('_', ' ')}
+                </Badge>
+            </div>
+
+            {/* Notes */}
+            {transaction.notes && (
+                <div className='text-sm text-gray-600 dark:text-gray-400'>
+                    {transaction.notes}
+                </div>
+            )}
+        </div>
+    );
+
+    // Filter tabs configuration
+    const filterTabs: FilterTab[] = [
+        { label: 'All', value: 'all', count: transactions.length, color: 'indigo' },
+        { label: 'Income', value: 'income', count: transactions.filter((t) => t.type === 'income').length, color: 'green' },
+        { label: 'Spending', value: 'spending', count: transactions.filter((t) => t.type === 'spending').length, color: 'red' },
+    ];
+
     return (
         <div className='space-y-6'>
-            {/* Summary Cards - Integrated */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                {/* Total Income */}
-                <div className='bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6 shadow-sm'>
-                    <div className='flex items-center justify-between mb-2'>
-                        <div className='text-sm font-medium text-green-700 dark:text-green-400'>Total Income</div>
-                        <div className='text-2xl'>💰</div>
-                    </div>
-                    <div className='text-3xl font-bold text-green-600 dark:text-green-400 mb-1'>
-                        {formatCurrency(totalIncome)}
-                    </div>
-                    <div className='text-xs text-green-600/70 dark:text-green-400/70'>
-                        {transactions.filter((t) => t.type === 'income').length} transactions
-                    </div>
-                </div>
-
-                {/* Total Spending */}
-                <div className='bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 shadow-sm'>
-                    <div className='flex items-center justify-between mb-2'>
-                        <div className='text-sm font-medium text-red-700 dark:text-red-400'>Total Spending</div>
-                        <div className='text-2xl'>💸</div>
-                    </div>
-                    <div className='text-3xl font-bold text-red-600 dark:text-red-400 mb-1'>
-                        {formatCurrency(totalSpending)}
-                    </div>
-                    <div className='text-xs text-red-600/70 dark:text-red-400/70'>
-                        {transactions.filter((t) => t.type === 'spending').length} transactions
-                    </div>
-                </div>
-
-                {/* Net Cash Flow */}
-                <div className={`bg-gradient-to-br ${
-                    netCashFlow >= 0
-                        ? 'from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800'
-                        : 'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-800'
-                } border rounded-xl p-6 shadow-sm`}>
-                    <div className='flex items-center justify-between mb-2'>
-                        <div className={`text-sm font-medium ${
-                            netCashFlow >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-orange-700 dark:text-orange-400'
-                        }`}>
-                            Net Cash Flow
-                        </div>
-                        <div className='text-2xl'>{netCashFlow >= 0 ? '🤑' : '🫩'}</div>
-                    </div>
-                    <div className={`text-3xl font-bold mb-1 ${
-                        netCashFlow >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-600 dark:text-orange-400'
-                    }`}>
-                        {netCashFlow >= 0 ? '+' : '-'}{formatCurrency(Math.abs(netCashFlow))}
-                    </div>
-                    <div className={`text-xs ${
+            {/* Summary Cards - Using Reusable Component */}
+            <SummaryCardGrid>
+                <SummaryCard
+                    title="Total Income"
+                    shortTitle="Income"
+                    value={formatCurrency(totalIncome)}
+                    icon="💰"
+                    description={`${transactions.filter((t) => t.type === 'income').length} transactions`}
+                    gradient="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800"
+                    titleColor="text-green-700 dark:text-green-400"
+                    valueColor="text-green-600 dark:text-green-400"
+                    descriptionColor="text-green-600/70 dark:text-green-400/70"
+                />
+                <SummaryCard
+                    title="Total Spending"
+                    shortTitle="Spending"
+                    value={formatCurrency(totalSpending)}
+                    icon="💸"
+                    description={`${transactions.filter((t) => t.type === 'spending').length} transactions`}
+                    gradient="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border-red-200 dark:border-red-800"
+                    titleColor="text-red-700 dark:text-red-400"
+                    valueColor="text-red-600 dark:text-red-400"
+                    descriptionColor="text-red-600/70 dark:text-red-400/70"
+                />
+                <SummaryCard
+                    title="Net Cash Flow"
+                    shortTitle="Net Flow"
+                    value={`${netCashFlow >= 0 ? '+' : '-'}${formatCurrency(Math.abs(netCashFlow))}`}
+                    icon={netCashFlow >= 0 ? '🤑' : '🫩'}
+                    description={netCashFlow >= 0 ? 'Profit' : 'Loss'}
+                    gradient={
+                        netCashFlow >= 0
+                            ? 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800'
+                            : 'bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-800'
+                    }
+                    titleColor={netCashFlow >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-orange-700 dark:text-orange-400'}
+                    valueColor={netCashFlow >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-600 dark:text-orange-400'}
+                    descriptionColor={
                         netCashFlow >= 0 ? 'text-blue-600/70 dark:text-blue-400/70' : 'text-orange-600/70 dark:text-orange-400/70'
-                    }`}>
-                        {netCashFlow >= 0 ? 'Profit' : 'Loss'}
-                    </div>
-                </div>
-            </div>
+                    }
+                />
+            </SummaryCardGrid>
 
             {/* Filter Tabs */}
-            <div className='flex gap-2 border-b border-gray-200 dark:border-gray-700'>
-                <button
-                    onClick={() => setFilter('all')}
-                    className={`px-4 py-2 font-medium text-sm transition ${
-                        filter === 'all'
-                            ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
-                    }`}
-                >
-                    All ({transactions.length})
-                </button>
-                <button
-                    onClick={() => setFilter('income')}
-                    className={`px-4 py-2 font-medium text-sm transition ${
-                        filter === 'income'
-                            ? 'text-green-600 dark:text-green-400 border-b-2 border-green-600 dark:border-green-400'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
-                    }`}
-                >
-                    Income ({transactions.filter((t) => t.type === 'income').length})
-                </button>
-                <button
-                    onClick={() => setFilter('spending')}
-                    className={`px-4 py-2 font-medium text-sm transition ${
-                        filter === 'spending'
-                            ? 'text-red-600 dark:text-red-400 border-b-2 border-red-600 dark:border-red-400'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
-                    }`}
-                >
-                    Spending ({transactions.filter((t) => t.type === 'spending').length})
-                </button>
-            </div>
+            <FilterTabs
+                tabs={filterTabs}
+                activeTab={filter}
+                onTabChange={setFilter}
+            />
 
-            {/* Desktop Table */}
-            <div className='hidden md:block bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden'>
-                <table className='w-full'>
-                    <thead className='bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700'>
-                        <tr>
-                            <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Date
-                            </th>
-                            <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Type
-                            </th>
-                            <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Description
-                            </th>
-                            <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Payment
-                            </th>
-                            <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Amount
-                            </th>
-                            <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                                Balance
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
-                        {transactionsWithBalance.map((transaction) => (
-                            <tr key={transaction.id} className='hover:bg-gray-50 dark:hover:bg-gray-700/50 transition'>
-                                <td className='px-6 py-4 whitespace-nowrap'>
-                                    <div className='text-sm text-gray-900 dark:text-gray-100'>
-                                        {formatDate(transaction.date)}
-                                    </div>
-                                </td>
-                                <td className='px-6 py-4 whitespace-nowrap'>
-                                    <Badge
-                                        variant={transaction.type === 'income' ? 'success' : 'danger'}
-                                    >
-                                        {transaction.type}
-                                    </Badge>
-                                </td>
-                                <td className='px-6 py-4'>
-                                    <div className='text-sm text-gray-900 dark:text-gray-100 font-medium'>
-                                        {transaction.description}
-                                    </div>
-                                    {transaction.category && (
-                                        <div className='text-xs text-gray-500 dark:text-gray-400'>
-                                            {transaction.category}
-                                        </div>
-                                    )}
-                                    {transaction.notes && (
-                                        <div className='text-xs text-gray-400 dark:text-gray-500 mt-1 line-clamp-1'>
-                                            {transaction.notes}
-                                        </div>
-                                    )}
-                                </td>
-                                <td className='px-6 py-4 whitespace-nowrap'>
-                                    <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
-                                        {transaction.payment_method.replace('_', ' ')}
-                                    </Badge>
-                                </td>
-                                <td className='px-6 py-4 whitespace-nowrap text-right'>
-                                    <div className={`text-sm font-semibold ${
-                                        transaction.type === 'income'
-                                            ? 'text-green-600 dark:text-green-400'
-                                            : 'text-red-600 dark:text-red-400'
-                                    }`}>
-                                        {transaction.type === 'income' ? '+' : '-'}
-                                        {formatCurrency(transaction.amount)}
-                                    </div>
-                                </td>
-                                <td className='px-6 py-4 whitespace-nowrap text-right'>
-                                    <div className={`text-sm font-semibold ${
-                                        transaction.balance >= 0
-                                            ? 'text-blue-600 dark:text-blue-400'
-                                            : 'text-red-600 dark:text-red-400'
-                                    }`}>
-                                        {formatCurrency(transaction.balance)}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {/* Transaction Table */}
+            <TransactionTable
+                columns={columns}
+                data={paginatedTransactions}
+                getRowKey={(transaction) => transaction.id}
+                mobileCardRenderer={renderMobileCard}
+            />
 
-            {/* Mobile Card View */}
-            <div className='md:hidden space-y-3'>
-                {transactionsWithBalance.map((transaction) => (
-                    <div
-                        key={transaction.id}
-                        className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4'
-                    >
-                        <div className='flex items-start justify-between mb-3'>
-                            <div className='flex-1'>
-                                <div className='flex items-center gap-2 mb-1'>
-                                    <div className='text-xs text-gray-500 dark:text-gray-400'>
-                                        {formatDate(transaction.date)}
-                                    </div>
-                                    <Badge
-                                        variant={transaction.type === 'income' ? 'success' : 'danger'}                                    >
-                                        {transaction.type}
-                                    </Badge>
-                                </div>
-                                <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
-                                    {transaction.description}
-                                </div>
-                                {transaction.category && (
-                                    <div className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
-                                        {transaction.category}
-                                    </div>
-                                )}
-                            </div>
-                            <div className='text-right ml-4'>
-                                <div className={`text-lg font-bold ${
-                                    transaction.type === 'income'
-                                        ? 'text-green-600 dark:text-green-400'
-                                        : 'text-red-600 dark:text-red-400'
-                                }`}>
-                                    {transaction.type === 'income' ? '+' : '-'}
-                                    {formatCurrency(transaction.amount)}
-                                </div>
-                                <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                                    Balance: {formatCurrency(transaction.balance)}
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex items-center gap-2'>
-                            <Badge variant={getPaymentMethodBadgeVariant(transaction.payment_method)}>
-                                {transaction.payment_method.replace('_', ' ')}
-                            </Badge>
-                        </div>
-                        {transaction.notes && (
-                            <div className='text-sm text-gray-600 dark:text-gray-400 mt-2'>
-                                {transaction.notes}
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                itemsPerPage={itemsPerPage}
+                totalItems={transactionsWithBalance.length}
+            />
         </div>
     );
 }

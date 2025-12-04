@@ -4,7 +4,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { PageContainer } from '@/components';
+import { PageContainer, Analytics } from '@/components';
 import { getCashFlowTransactions } from './actions';
 import { CashFlow } from './cash-flow';
 
@@ -35,6 +35,13 @@ export default async function DashboardPage() {
                     💵 Cash Flow Timeline
                 </h2>
                 <CashFlow transactions={transactions} />
+            </div>
+        )}
+
+        {/* Analytics Section */}
+        {hasTransactions && (
+            <div className="mb-8">
+                <Analytics transactions={transactions} />
             </div>
         )}
 
@@ -103,7 +110,7 @@ export default async function DashboardPage() {
                         href="#cash-flow"
                         className="text-sm text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-700 dark:hover:text-indigo-300 inline-block"
                     >
-                        View timeline ↓
+                        View timeline →
                     </a>
                 </div>
             </div>
