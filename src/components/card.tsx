@@ -55,6 +55,11 @@ interface SummaryCardProps {
     value: string | number;
     shortTitle?: string;
     valueColor?: string;
+    icon?: string;
+    description?: string;
+    gradient?: string;
+    titleColor?: string;
+    descriptionColor?: string;
 }
 
 export function SummaryCard({
@@ -62,21 +67,44 @@ export function SummaryCard({
     value,
     shortTitle,
     valueColor = 'text-gray-900 dark:text-gray-100',
+    icon,
+    description,
+    gradient,
+    titleColor = 'text-gray-600 dark:text-gray-400',
+    descriptionColor = 'text-gray-500 dark:text-gray-400',
 }: SummaryCardProps) {
-    return (
-        <Card className="p-3 md:p-6">
-            <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
-                {shortTitle && (
-                    <>
-                        <span className="md:hidden">{shortTitle}</span>
-                        <span className="hidden md:inline">{title}</span>
-                    </>
-                )}
-                {!shortTitle && title}
-            </p>
-            <p className={`text-lg md:text-3xl font-bold ${valueColor}`}>
+    const cardClassName = gradient
+        ? `${gradient} shadow-sm p-3 md:p-6 rounded-xl border`
+        : 'p-3 md:p-6';
+
+    const content = (
+        <>
+            <div className="flex items-center justify-between mb-1 md:mb-2">
+                <p className={`text-xs md:text-sm font-medium ${titleColor}`}>
+                    {shortTitle && (
+                        <>
+                            <span className="md:hidden">{shortTitle}</span>
+                            <span className="hidden md:inline">{title}</span>
+                        </>
+                    )}
+                    {!shortTitle && title}
+                </p>
+                {icon && <div className="hidden sm:block text-xl md:text-2xl">{icon}</div>}
+            </div>
+            <p className={`text-base sm:text-lg md:text-3xl font-bold ${valueColor} mb-1`}>
                 {value}
             </p>
-        </Card>
+            {description && (
+                <p className={`text-[10px] sm:text-xs ${descriptionColor}`}>
+                    {description}
+                </p>
+            )}
+        </>
+    );
+
+    return gradient ? (
+        <div className={cardClassName}>{content}</div>
+    ) : (
+        <Card className={cardClassName}>{content}</Card>
     );
 }

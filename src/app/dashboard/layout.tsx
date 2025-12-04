@@ -30,7 +30,7 @@ export default async function DashboardLayout({
                             <Link
                                 href='/dashboard'
                                 className='text-2xl font-bold text-indigo-600 dark:text-indigo-400'>
-                                Tally
+                                Tally.
                             </Link>
                             {/* Nav Links */}
                             <div className='hidden md:flex items-center gap-6'>

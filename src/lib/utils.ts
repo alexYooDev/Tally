@@ -124,6 +124,27 @@ export function getTodayISO(): string {
 }
 
 /**
+ * Formats a date string for transaction display
+ * Consistent formatting across all transaction lists
+ *
+ * @param dateString - ISO date string
+ * @returns Formatted date string (e.g., "15 Jan 2024")
+ *
+ * @example
+ * ```ts
+ * formatTransactionDate('2024-01-15') // "15 Jan 2024"
+ * ```
+ */
+export function formatTransactionDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-AU', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
+/**
  * Gets start and end dates for a time period
  * 
  * @param period - Time period type
