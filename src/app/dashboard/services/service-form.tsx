@@ -4,7 +4,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { ArrowLeftSquareIcon, PlusSquareIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface ServiceFormProps {
@@ -25,10 +24,10 @@ export function ServiceForm({
     submitLabel,
     initialData,
 }: ServiceFormProps) {
-    
+
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
-    const [showCustomCategory, setShowCustomCategory] = useState(false);
+    const [categoryInput, setCategoryInput] = useState<string>(initialData?.category || '');
     const formRef = useRef<HTMLFormElement>(null);
     const router = useRouter();
 
@@ -74,60 +73,44 @@ export function ServiceForm({
             </div>
             {/* Category */}
             <div>
-                <label 
+                <label
                     htmlFor='category'
                     className='block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100'
                 >
                     Category
                 </label>
-                {!showCustomCategory && existingCategories.length > 0 ? (
-                    <>
-                        <select
-                            id='category' 
-                            name='category'
-                            defaultValue={initialData?.category || ''}
-                            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'
-                            disabled={loading}
-                        >
-                            <option value="">Select a category</option>
-                            {existingCategories.map((category) => (
-                                <option key={category.id} value={category.name}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
+                <div className='relative'>
+                    <input
+                        type='text'
+                        id='category'
+                        name='category'
+                        list='category-suggestions'
+                        value={categoryInput}
+                        onChange={(e) => setCategoryInput(e.target.value)}
+                        placeholder='e.g., Lash Extensions, Nails, Hair'
+                        className='w-full px-4 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500'
+                        disabled={loading}
+                    />
+                    {categoryInput && (
                         <button
                             type='button'
-                            onClick={() => setShowCustomCategory(true)}
-                            className='mt-2 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300'
+                            onClick={() => setCategoryInput('')}
+                            className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'
+                            aria-label='Clear category'
                         >
-                            <PlusSquareIcon className='inline w-4 h-4 mr-2' />
-                            Add Custom Category
+                            <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+                                <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' clipRule='evenodd' />
+                            </svg>
                         </button>
-                    </>
-                ) : (
-                    <>
-                        <input
-                            type='text'
-                            id='category'
-                            name='category'
-                            defaultValue={initialData?.category || ''}
-                            placeholder='e.g., Lash Extensions'
-                            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition'
-                            disabled={loading}
-                        />
-                        <button
-                            type='button'
-                            onClick={() => setShowCustomCategory(false)}
-                            className='mt-2 text-sm text-indigo-600 hover:text-indigo-700'
-                        >
-                            <ArrowLeftSquareIcon className='inline w-4 h-4 mr-2' />
-                            Choose existing category
-                        </button>
-                    </>
-                )}
-                <p className='mt-1 text-xs texy-gray-500 dark:text-gray-400'>
-                    Optional - helps organize your services
+                    )}
+                    <datalist id='category-suggestions'>
+                        {existingCategories.map((category) => (
+                            <option key={category.id} value={category.name} />
+                        ))}
+                    </datalist>
+                </div>
+                <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
+                    Optional - type to search or create new category
                 </p>
             </div>
             {/* Prices */}

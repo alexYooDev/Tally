@@ -100,21 +100,38 @@ export function IncomeForm({
                 <label htmlFor='service_id' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                     Service
                 </label>
-                <select
-                    id='service_id'
-                    name='service_id'
-                    value={selectedServiceId}
-                    onChange={(e) => setSelectedServiceId(e.target.value)}
-                    className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
-                    disabled={loading}
-                >
-                    <option value=''>Select a service (optional)</option>
-                    {services.map((service) => (
-                        <option key={service.id} value={service.id}>
-                            {service.name} - ${service.default_price.toFixed(2)}
-                        </option>
-                    ))}
-                </select>
+                <div className='relative'>
+                    <select
+                        id='service_id'
+                        name='service_id'
+                        value={selectedServiceId}
+                        onChange={(e) => setSelectedServiceId(e.target.value)}
+                        className='w-full px-4 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                        disabled={loading}
+                    >
+                        <option value=''>Select a service (optional)</option>
+                        {services.map((service) => (
+                            <option key={service.id} value={service.id}>
+                                {service.name} - ${service.default_price.toFixed(2)}
+                            </option>
+                        ))}
+                    </select>
+                    {selectedServiceId && (
+                        <button
+                            type='button'
+                            onClick={() => {
+                                setSelectedServiceId('');
+                                setPrice(0);
+                            }}
+                            className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'
+                            aria-label='Clear service selection'
+                        >
+                            <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+                                <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' clipRule='evenodd' />
+                            </svg>
+                        </button>
+                    )}
+                </div>
                 <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Optional - selecting a service will auto-fill the price
                 </p>
