@@ -29,6 +29,7 @@
 
 # api
 /api
+/src/app/api/
 /postman
 
 # debug

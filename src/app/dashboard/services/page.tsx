@@ -8,8 +8,8 @@ import {
     EmptyState,
     InfoAlert,
 } from '@/components';
-import { PageLoading } from '@/components/page-loading';
-import { ErrorBoundary } from '@/components/error-boundary';
+import { PageLoading } from '@/components';
+import { ErrorBoundary } from '@/components';
 
 type Category = {
     id: string;

@@ -14,6 +14,7 @@ export * from './forms/textarea';
 // Layout
 export { PageContainer } from './layout/page-container';
 export { PageHeader } from './layout/page-header';
+export { PageLoading } from './layout/page-loading';
 
 // Feedback
 export { LoadingSpinner } from './feedback/loading-spinner';

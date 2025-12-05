@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Card } from './card';
+import { Card } from '@/components/ui/card';
 
 interface EmptyStateProps {
     icon?: string;

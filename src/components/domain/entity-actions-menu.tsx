@@ -4,7 +4,7 @@
 'use client';
 
 import Link from 'next/link';
-import { DropdownMenu, DropdownMenuItem } from '@/components/dropdown-menu';
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -76,7 +76,7 @@ export function EntityActionsMenu({
             <Link href={editPath}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem variant="danger" onClick={() => setShowConfirm(true)}>
+            <DropdownMenuItem variant="destructive" onClick={() => setShowConfirm(true)}>
                 Delete
             </DropdownMenuItem>
         </DropdownMenu>

@@ -6,8 +6,8 @@ import {
     PageHeader,
     EmptyState,
 } from '@/components';
-import { PageLoading } from '@/components/page-loading';
-import { ErrorBoundary } from '@/components/error-boundary';
+import { PageLoading } from '@/components';
+import { ErrorBoundary } from '@/components';
 
 async function IncomeContent() {
     const { data: transactions, error } = await getIncomeTransactions();

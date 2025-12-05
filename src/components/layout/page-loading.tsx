@@ -1,4 +1,4 @@
-import { LoadingSpinner } from "./loading-spinner";
+import { LoadingSpinner } from "@/components/feedback/loading-spinner";
 
 export function PageLoading() {
   return (
