@@ -67,7 +67,7 @@ export function CashFlow({ transactions }: CashFlowProps) {
         {
             header: 'Type',
             render: (transaction) => (
-                <Badge variant={transaction.type === 'income' ? 'success' : 'danger'}>
+                <Badge variant={transaction.type === 'income' ? 'success' : 'destructive'}>
                     {transaction.type}
                 </Badge>
             ),
@@ -143,7 +143,7 @@ export function CashFlow({ transactions }: CashFlowProps) {
                             {transaction.description}
                         </div>
                         <Badge
-                            variant={transaction.type === 'income' ? 'success' : 'danger'}
+                            variant={transaction.type === 'income' ? 'success' : 'destructive'}
                             className='shrink-0'
                         >
                             {transaction.type}

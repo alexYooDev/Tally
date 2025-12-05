@@ -1,35 +1,26 @@
+import { Suspense } from 'react';
 import { getSpendingTransactions, getSpendingCategories } from './actions';
 import { SpendingList } from './spending-list';
 import {
     PageContainer,
     PageHeader,
-    ErrorAlert,
     EmptyState,
 } from '@/components';
+import { PageLoading } from '@/components';
+import { ErrorBoundary } from '@/components';
 
-export default async function SpendingPage() {
+async function SpendingContent() {
     const { data: transactions, error } = await getSpendingTransactions();
     const { data: categories } = await getSpendingCategories();
 
     if (error) {
-        return (
-            <PageContainer>
-                <ErrorAlert>Error loading spending transactions: {error}</ErrorAlert>
-            </PageContainer>
-        );
+        throw new Error(error);
     }
 
     const hasTransactions = transactions && transactions.length > 0;
 
     return (
-        <PageContainer>
-            <PageHeader
-                title="Spending"
-                description="Track your expenses and spending"
-                actionLabel="+ Log Spending"
-                actionHref="/dashboard/spending/new"
-            />
-
+        <>
             {/* Spending List */}
             {!hasTransactions ? (
                 <EmptyState
@@ -47,6 +38,24 @@ export default async function SpendingPage() {
             ) : (
                 <SpendingList transactions={transactions} categories={categories || []} />
             )}
+        </>
+    );
+}
+
+export default function SpendingPage() {
+    return (
+        <PageContainer>
+            <PageHeader
+                title="Spending"
+                description="Track your expenses and spending"
+                actionLabel="+ Log Spending"
+                actionHref="/dashboard/spending/new"
+            />
+            <ErrorBoundary>
+                <Suspense fallback={<PageLoading />}>
+                    <SpendingContent />
+                </Suspense>
+            </ErrorBoundary>
         </PageContainer>
     );
 }

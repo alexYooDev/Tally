@@ -27,6 +27,11 @@
 # notes
 /notes
 
+# api
+/api
+/src/app/api/
+/postman
+
 # debug
 npm-debug.log*
 yarn-debug.log*

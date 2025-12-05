@@ -4,16 +4,18 @@
 'use client';
 
 import Link from 'next/link';
-import { DropdownMenu, DropdownMenuItem } from '@/components/dropdown-menu';
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { toast } from "sonner";
 
 interface EntityActionsMenuProps {
     entityId: string;
     entityLabel: string;
     editPath: string;
     redirectPath: string;
-    onDelete: (id: string) => Promise<{ error?: string }>;
+    onDelete: (id: string) => Promise<{ success?: boolean; error?: string; message?: string }>;
 }
 
 export function EntityActionsMenu({
@@ -29,14 +31,22 @@ export function EntityActionsMenu({
 
     async function handleDelete() {
         setIsDeleting(true);
-        const result = await onDelete(entityId);
+        try {
+            const result = await onDelete(entityId);
 
-        if (result?.error) {
-            alert(`Error: ${result.error}`);
+            if (result?.error) {
+                toast.error(result.error);
+                setIsDeleting(false);
+                setShowConfirm(false);
+            } else {
+                toast.success(result.message || `${entityLabel} deleted successfully`);
+                router.push(redirectPath);
+                router.refresh();
+            }
+        } catch (error) {
+            toast.error("An unexpected error occurred");
             setIsDeleting(false);
             setShowConfirm(false);
-        } else {
-            router.push(redirectPath);
         }
     }
 
@@ -66,7 +76,7 @@ export function EntityActionsMenu({
             <Link href={editPath}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem variant="danger" onClick={() => setShowConfirm(true)}>
+            <DropdownMenuItem variant="destructive" onClick={() => setShowConfirm(true)}>
                 Delete
             </DropdownMenuItem>
         </DropdownMenu>

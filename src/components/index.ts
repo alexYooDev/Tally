@@ -1,55 +1,41 @@
-// Alert components
-export { Alert, ErrorAlert, SuccessAlert, InfoAlert, WarningAlert } from './alert';
+// UI Primitives
+export * from './ui/alert';
+export * from './ui/badge';
+export * from './ui/button';
+export * from './ui/card';
+export * from './ui/dropdown-menu';
 
-// Badge components
-export { Badge, getPaymentMethodBadgeVariant } from './badge';
+// Forms
+export * from './forms/form-field';
+export * from './forms/input';
+export * from './forms/select';
+export * from './forms/textarea';
 
-// Button components
-export { Button, PrimaryButton, SecondaryButton, DangerButton } from './button';
+// Layout
+export { PageContainer } from './layout/page-container';
+export { PageHeader } from './layout/page-header';
+export { PageLoading } from './layout/page-loading';
 
-// Card components
-export { Card, StatCard, SummaryCard } from './card';
+// Feedback
+export { LoadingSpinner } from './feedback/loading-spinner';
+export { EmptyState } from './feedback/empty-state';
+export { ErrorMessage } from './feedback/error-message';
+export { ErrorBoundary } from './feedback/error-boundary';
+export { NoResults } from './feedback/no-results';
 
-// Empty state
-export { EmptyState } from './empty-state';
+// Navigation
+export { MobileNav } from './navigation/mobile-nav';
 
-// Form components
-export { FormField, Input, Select, Textarea } from './form-input';
+// Data Display
+export { Analytics } from './data-display/analytics';
+export { Pagination, usePagination } from './data-display/pagination';
+export { TransactionTable, type TableColumn } from './data-display/transaction-table';
+export { TransactionFilters, type FilterState } from './data-display/transaction-filters';
+export { ResultsCount } from './data-display/results-count';
+export { FilterTabs, type FilterTab } from './data-display/filter-tabs';
+export { SummaryCardGrid } from './data-display/summary-card-grid';
 
-// Loading spinner
-export { LoadingSpinner } from './loading-spinner';
+// Domain-specific
+export { CategorySelectWithDelete } from './domain/category-select-with-delete';
+export { EntityActionsMenu } from './domain/entity-actions-menu';
 
-// Page components
-export { PageContainer } from './page-container';
-export { PageHeader } from './page-header';
-
-// Category select
-export { CategorySelectWithDelete } from './category-select-with-delete';
-
-// Mobile navigation
-export { MobileNav } from './mobile-nav';
-
-// Transaction filters
-export { TransactionFilters, type FilterState } from './transaction-filters';
-
-// Analytics
-export { Analytics } from './analytics';
-
-// Pagination
-export { Pagination, usePagination } from './pagination';
-
-// Transaction table
-export { TransactionTable, type TableColumn } from './transaction-table';
-
-// Entity actions menu
-export { EntityActionsMenu } from './entity-actions-menu';
-
-// Results display
-export { ResultsCount } from './results-count';
-export { NoResults } from './no-results';
-
-// Filter tabs
-export { FilterTabs, type FilterTab } from './filter-tabs';
-
-// Summary card grid
-export { SummaryCardGrid } from './summary-card-grid';

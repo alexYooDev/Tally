@@ -1,34 +1,25 @@
+import { Suspense } from 'react';
 import { getIncomeTransactions } from './actions';
 import { IncomeList } from './income-list';
 import {
     PageContainer,
     PageHeader,
-    ErrorAlert,
     EmptyState,
 } from '@/components';
+import { PageLoading } from '@/components';
+import { ErrorBoundary } from '@/components';
 
-export default async function IncomePage() {
+async function IncomeContent() {
     const { data: transactions, error } = await getIncomeTransactions();
 
     if (error) {
-        return (
-            <PageContainer>
-                <ErrorAlert>Error loading income transactions: {error}</ErrorAlert>
-            </PageContainer>
-        );
+        throw new Error(error);
     }
 
     const hasTransactions = transactions && transactions.length > 0;
 
     return (
-        <PageContainer>
-            <PageHeader
-                title="Income"
-                description="Track your income and earnings"
-                actionLabel="+ Log Income"
-                actionHref="/dashboard/income/new"
-            />
-
+        <>
             {/* Income List */}
             {!hasTransactions ? (
                 <EmptyState
@@ -46,6 +37,24 @@ export default async function IncomePage() {
             ) : (
                 <IncomeList transactions={transactions} />
             )}
+        </>
+    );
+}
+
+export default function IncomePage() {
+    return (
+        <PageContainer>
+            <PageHeader
+                title="Income"
+                description="Track your income and earnings"
+                actionLabel="+ Log Income"
+                actionHref="/dashboard/income/new"
+            />
+            <ErrorBoundary>
+                <Suspense fallback={<PageLoading />}>
+                    <IncomeContent />
+                </Suspense>
+            </ErrorBoundary>
         </PageContainer>
     );
 }

@@ -5,9 +5,10 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface ServiceFormProps {
-    action: (formData: FormData) => Promise<any>;
+    action: (formData: FormData) => Promise<{ success?: boolean; error?: string; message?: string }>;
     existingCategories: Array<{id: string; name: string}>;
     submitLabel: string;
     initialData?: {
@@ -37,14 +38,24 @@ export function ServiceForm({
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const result = await action(formData);
+        try {
+            const result = await action(formData);
 
-        if (result?.error) {
-            setError(result.error);
+            if (result?.error) {
+                toast.error(result.error);
+                setError(result.error);
+                setLoading(false);
+            } else {
+                toast.success(result.message || 'Service saved successfully');
+                // If successful the action will redirect to the services page
+                router.push('/dashboard/services');
+                router.refresh();
+            }
+        } catch (error) {
+            toast.error('An unexpected error occurred');
+            setError('An unexpected error occurred');
             setLoading(false);
         }
-        // If successful the action will redirect to the services page
-        router.push('/dashboard/services');
     }
 
     return (

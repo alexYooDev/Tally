@@ -36,7 +36,7 @@ export type Database = {
                 Row: Service;
                 Insert: Omit<Service, 'id' | 'created_at' | 'updated_at' | 'is_active'>;
                 Update: Partial<Omit<Service, 'id' | 'created_at' | 'updated_at' | 'user_id'>>;
-            }
+            };
             income_transactions: {
                 Row: IncomeTransaction;
                 Insert: Omit<IncomeTransaction, 'id' | 'created_at' | 'updated_at'>;
@@ -46,7 +46,7 @@ export type Database = {
                 Row: SpendingTransaction;
                 Insert: Omit<SpendingTransaction, 'id' | 'created_at' | 'updated_at'>;
                 Update: Partial<Omit<SpendingTransaction, 'id' | 'created_at' | 'updated_at'>>;
-            }
+            };
         };
         Views: {
             [_ in never]: never;

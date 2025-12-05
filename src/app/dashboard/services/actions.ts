@@ -167,7 +167,7 @@ export async function checkCategoryUsage(categoryId: string) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     const { count, error } = await supabase
@@ -296,7 +296,7 @@ export async function createService(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     /* Get form data */
@@ -307,13 +307,13 @@ export async function createService(formData: FormData) {
 
     /* Validate */
     if (!name || !priceStr) {
-        return { error: 'Name and price are required' };
+        return { success: false, error: 'Name and price are required' };
     }
 
     const price = parseFloat(priceStr);
     
     if (isNaN(price) || price < 0) {
-        return { error: 'Price must be a valid positive number' };
+        return { success: false, error: 'Price must be a valid positive number' };
     }
 
     /* Get or create category */
@@ -325,7 +325,7 @@ export async function createService(formData: FormData) {
         const categoryResult = await getOrCreateCategory(categoryName.trim());
         
         if (categoryResult.error) {
-            return { error: categoryResult.error };
+            return { success: false, error: categoryResult.error };
         }
         
         categoryId = categoryResult.data?.id;
@@ -344,11 +344,11 @@ export async function createService(formData: FormData) {
 
     if (error) {
         console.error('Error creating service', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/services');
-    return { success: true };
+    return { success: true, message: 'Service created successfully' };
 };
 
 /**
@@ -359,7 +359,7 @@ export async function updateService(id: string, formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     // Get form data
@@ -370,12 +370,12 @@ export async function updateService(id: string, formData: FormData) {
 
     // Validate
     if (!name || !priceStr) {
-        return { error: 'Name and price are required' };
+        return { success: false, error: 'Name and price are required' };
     }
 
     const price = parseFloat(priceStr);
     if (isNaN(price) || price < 0) {
-        return { error: 'Price must be a valid positive number' };
+        return { success: false, error: 'Price must be a valid positive number' };
     }
 
     // Get or create category
@@ -383,7 +383,7 @@ export async function updateService(id: string, formData: FormData) {
     if (categoryName && categoryName.trim()) {
         const categoryResult = await getOrCreateCategory(categoryName.trim());
         if (categoryResult.error) {
-        return { error: categoryResult.error };
+            return { success: false, error: categoryResult.error };
         }
         categoryId = categoryResult.data?.id;
     }
@@ -403,11 +403,11 @@ export async function updateService(id: string, formData: FormData) {
 
     if (error) {
         console.error('Error updating service:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/services');
-    return { success: true };
+    return { success: true, message: 'Service updated successfully' };
 }
 
 /**
@@ -418,7 +418,7 @@ export async function deleteService(id: string) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     const { error } = await supabase
@@ -429,9 +429,9 @@ export async function deleteService(id: string) {
 
     if (error) {
         console.error('Error deleting service', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/services');
-    return { success: true };
+    return { success: true, message: 'Service deleted successfully' };
 }

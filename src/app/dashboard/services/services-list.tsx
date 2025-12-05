@@ -67,7 +67,7 @@ export function ServicesList({ services }: ServicesListProps) {
                                     </div>
                                 </td>
                                 <td className='px-6 py-4 whitespace-nowrap'>
-                                    <Badge variant="primary">
+                                    <Badge variant="info">
                                         {service.category?.name || 'Uncategorized'}
                                     </Badge>
                                 </td>
@@ -123,7 +123,7 @@ export function ServicesList({ services }: ServicesListProps) {
                                     {service.name}
                                 </div>
                                 <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                                    <Badge variant="primary">
+                                    <Badge variant="info">
                                         {service.category?.name || 'Uncategorized'}
                                     </Badge>
                                 </div>
