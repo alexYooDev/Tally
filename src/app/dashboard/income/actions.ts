@@ -202,7 +202,7 @@ export async function createIncomeTransaction(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     // Get form data
@@ -216,22 +216,22 @@ export async function createIncomeTransaction(formData: FormData) {
 
     // Validate required fields
     if (!date || !priceStr || !paymentMethod) {
-        return { error: 'Date, price, and payment method are required' };
+        return { success: false, error: 'Date, price, and payment method are required' };
     }
 
     const price = parseFloat(priceStr);
     const discount = discountStr ? parseFloat(discountStr) : 0;
 
     if (isNaN(price) || price < 0) {
-        return { error: 'Price must be a valid positive number' };
+        return { success: false, error: 'Price must be a valid positive number' };
     }
 
     if (isNaN(discount) || discount < 0) {
-        return { error: 'Discount must be a valid positive number' };
+        return { success: false, error: 'Discount must be a valid positive number' };
     }
 
     if (discount > price) {
-        return { error: 'Discount cannot be greater than price' };
+        return { success: false, error: 'Discount cannot be greater than price' };
     }
 
     // Calculate total received
@@ -254,11 +254,11 @@ export async function createIncomeTransaction(formData: FormData) {
 
     if (error) {
         console.error('Error creating income transaction:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/income');
-    return { success: true };
+    return { success: true, message: 'Income transaction created successfully' };
 }
 
 /**
@@ -269,7 +269,7 @@ export async function updateIncomeTransaction(id: string, formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     // Get form data
@@ -283,22 +283,22 @@ export async function updateIncomeTransaction(id: string, formData: FormData) {
 
     // Validate required fields
     if (!date || !priceStr || !paymentMethod) {
-        return { error: 'Date, price, and payment method are required' };
+        return { success: false, error: 'Date, price, and payment method are required' };
     }
 
     const price = parseFloat(priceStr);
     const discount = discountStr ? parseFloat(discountStr) : 0;
 
     if (isNaN(price) || price < 0) {
-        return { error: 'Price must be a valid positive number' };
+        return { success: false, error: 'Price must be a valid positive number' };
     }
 
     if (isNaN(discount) || discount < 0) {
-        return { error: 'Discount must be a valid positive number' };
+        return { success: false, error: 'Discount must be a valid positive number' };
     }
 
     if (discount > price) {
-        return { error: 'Discount cannot be greater than price' };
+        return { success: false, error: 'Discount cannot be greater than price' };
     }
 
     // Calculate total received
@@ -323,11 +323,11 @@ export async function updateIncomeTransaction(id: string, formData: FormData) {
 
     if (error) {
         console.error('Error updating income transaction:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/income');
-    return { success: true };
+    return { success: true, message: 'Income transaction updated successfully' };
 }
 
 /**
@@ -338,7 +338,7 @@ export async function deleteIncomeTransaction(id: string) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     const { error } = await supabase
@@ -349,9 +349,9 @@ export async function deleteIncomeTransaction(id: string) {
 
     if (error) {
         console.error('Error deleting income transaction:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/income');
-    return { success: true };
+    return { success: true, message: 'Income transaction deleted successfully' };
 }

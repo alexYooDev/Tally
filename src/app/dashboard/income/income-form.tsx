@@ -5,10 +5,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import type { ServiceMinimal } from '@/types/supabase';
 
 interface IncomeFormProps {
-    action: (formData: FormData) => Promise<any>;
+    action: (formData: FormData) => Promise<{ success?: boolean; error?: string; message?: string }>;
     services: ServiceMinimal[];
     submitLabel: string;
     initialData?: {
@@ -58,14 +59,23 @@ export function IncomeForm({
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const result = await action(formData);
+        try {
+            const result = await action(formData);
 
-        if (result?.error) {
-            setError(result.error);
+            if (result?.error) {
+                toast.error(result.error);
+                setError(result.error);
+                setLoading(false);
+            } else {
+                toast.success(result.message || 'Income logged successfully');
+                // If successful, redirect to income page
+                router.push('/dashboard/income');
+                router.refresh();
+            }
+        } catch (error) {
+            toast.error('An unexpected error occurred');
+            setError('An unexpected error occurred');
             setLoading(false);
-        } else {
-            // If successful, redirect to income page
-            router.push('/dashboard/income');
         }
     }
 

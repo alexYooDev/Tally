@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getServices } from './actions';
 import { ServicesList } from './services-list';
 import {
@@ -7,6 +8,8 @@ import {
     EmptyState,
     InfoAlert,
 } from '@/components';
+import { PageLoading } from '@/components/page-loading';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 type Category = {
     id: string;
@@ -23,16 +26,11 @@ type Service = {
     category: Category | null;
 };
 
-
-export default async function ServicesPage() {
+async function ServicesContent() {
     const { data: services, error } = await getServices();
 
     if (error) {
-        return (
-            <PageContainer>
-                <ErrorAlert>Error loading services: {error}</ErrorAlert>
-            </PageContainer>
-        );
+        throw new Error(error);
     }
 
     /* Group services by category */
@@ -50,13 +48,7 @@ export default async function ServicesPage() {
     const hasServices = services && services.length > 0;
 
     return (
-        <PageContainer>
-            <PageHeader
-                title="Services"
-                description="Manage your services and pricing"
-                actionLabel="+ Add Service"
-                actionHref="/dashboard/services/new"
-            />
+        <>
             {/* Services List */}
             {!hasServices ? (
                 <EmptyState
@@ -82,7 +74,7 @@ export default async function ServicesPage() {
                         <span className="text-2xl">📊</span>
                         <div>
                             <p className="font-medium">
-                                {services.length} service{services.length !== 1 ? 's' : ''} total
+                                {services?.length || 0} service{services?.length !== 1 ? 's' : ''} total
                             </p>
                             <p className="text-xs">
                                 {Object.keys(groupedServices).length} categor{Object.keys(groupedServices).length !== 1 ? 'ies' : 'y'}
@@ -91,6 +83,24 @@ export default async function ServicesPage() {
                     </div>
                 </InfoAlert>
             )}
+        </>
+    );
+}
+
+export default function ServicesPage() {
+    return (
+        <PageContainer>
+            <PageHeader
+                title="Services"
+                description="Manage your services and pricing"
+                actionLabel="+ Add Service"
+                actionHref="/dashboard/services/new"
+            />
+            <ErrorBoundary>
+                <Suspense fallback={<PageLoading />}>
+                    <ServicesContent />
+                </Suspense>
+            </ErrorBoundary>
         </PageContainer>
     );
 }

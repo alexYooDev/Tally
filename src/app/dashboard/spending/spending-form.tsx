@@ -5,12 +5,13 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { CategorySelectWithDelete } from '@/components';
 import { deleteCategory } from './actions';
 import type { CategoryMinimal } from './actions';
 
 interface SpendingFormProps {
-    action: (formData: FormData) => Promise<any>;
+    action: (formData: FormData) => Promise<{ success?: boolean; error?: string; message?: string }>;
     categories: CategoryMinimal[];
     submitLabel: string;
     initialData?: {
@@ -44,14 +45,23 @@ export function SpendingForm({
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const result = await action(formData);
+        try {
+            const result = await action(formData);
 
-        if (result?.error) {
-            setError(result.error);
+            if (result?.error) {
+                toast.error(result.error);
+                setError(result.error);
+                setLoading(false);
+            } else {
+                toast.success(result.message || 'Spending logged successfully');
+                // If successful, redirect to spending page
+                router.push('/dashboard/spending');
+                router.refresh();
+            }
+        } catch (error) {
+            toast.error('An unexpected error occurred');
+            setError('An unexpected error occurred');
             setLoading(false);
-        } else {
-            // If successful, redirect to spending page
-            router.push('/dashboard/spending');
         }
     }
 

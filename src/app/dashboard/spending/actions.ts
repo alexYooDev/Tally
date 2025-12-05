@@ -309,7 +309,7 @@ export async function createSpendingTransaction(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     // Get form data
@@ -322,13 +322,13 @@ export async function createSpendingTransaction(formData: FormData) {
 
     // Validate required fields
     if (!date || !description || !amountStr || !paymentMethod) {
-        return { error: 'Date, description, amount, and payment method are required' };
+        return { success: false, error: 'Date, description, amount, and payment method are required' };
     }
 
     const amount = parseFloat(amountStr);
 
     if (isNaN(amount) || amount < 0) {
-        return { error: 'Amount must be a valid postive number' };
+        return { success: false, error: 'Amount must be a valid postive number' };
     }
 
     // Get or create category
@@ -337,7 +337,7 @@ export async function createSpendingTransaction(formData: FormData) {
         const categoryResult = await getOrCreateCategoryByName(categoryName.trim());
         
         if (categoryResult.error) {
-            return { error: categoryResult.error };
+            return { success: false, error: categoryResult.error };
         }
 
         categoryId = categoryResult.data?.id;
@@ -358,11 +358,11 @@ export async function createSpendingTransaction(formData: FormData) {
 
     if (error) {
         console.error('Error creating spending transaction:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/spending');
-    return { success: true };
+    return { success: true, message: 'Spending transaction created successfully' };
 }
 
 /* Update an existing spending transaction */
@@ -371,7 +371,7 @@ export async function updateSpendingTransaction(id: string, formData: FormData) 
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     // Get form data
@@ -384,13 +384,13 @@ export async function updateSpendingTransaction(id: string, formData: FormData) 
 
     // Validate required fields
     if (!date || !description || !amountStr || !paymentMethod) {
-        return { error: 'Date, description, amount, and payment method are required' };
+        return { success: false, error: 'Date, description, amount, and payment method are required' };
     }
 
     const amount = parseFloat(amountStr);
 
     if(isNaN(amount) || amount < 0) {
-        return { error: 'amount must be a valid positive number' };
+        return { success: false, error: 'amount must be a valid positive number' };
     }
 
     // Get or create category
@@ -398,7 +398,7 @@ export async function updateSpendingTransaction(id: string, formData: FormData) 
     if (categoryName && categoryName.trim()) {
         const categoryResult = await getOrCreateCategoryByName(categoryName);
         if (categoryResult.error) {
-            return { error: categoryResult.error };
+            return { success: false, error: categoryResult.error };
         }
         categoryId = categoryResult.data?.id;
     }
@@ -420,11 +420,11 @@ export async function updateSpendingTransaction(id: string, formData: FormData) 
 
     if (error) {
         console.error('Error updating spending transaction:', error);
-        return { error: error.message || 'Error updating spending transaction' };
+        return { success: false, error: error.message || 'Error updating spending transaction' };
     }
 
     revalidatePath('/dashboard/spending');
-    return { success: true };
+    return { success: true, message: 'Spending transaction updated successfully' };
 }
 
 /* Delete a spending transaction */
@@ -433,7 +433,7 @@ export async function deleteSpendingTransaction(id: string) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: 'Not authenticated' };
+        return { success: false, error: 'Not authenticated' };
     }
 
     const { error } = await supabase
@@ -444,9 +444,9 @@ export async function deleteSpendingTransaction(id: string) {
     
     if (error) {
         console.error('Error deleting spending transaction:', error);
-        return { error: error.message };
+        return { success: false, error: error.message };
     }
 
     revalidatePath('/dashboard/spending');
-    return { success: true };
+    return { success: true, message: 'Spending transaction deleted successfully' };
 }
