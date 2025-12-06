@@ -21,8 +21,8 @@ export default async function DashboardLayout({
 
     return (
         <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
-            {/* Top Navigation */}
-            <nav className='bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700'>
+            {/* Top Navigation - Fixed */}
+            <nav className='fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-700'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                     <div className='flex justify-between items-center h-16'>
                         {/* Logo & Navigation*/}
@@ -80,8 +80,8 @@ export default async function DashboardLayout({
                     </div>
                 </div>
             </nav>
-            {/* Main Content */}
-            <main>
+            {/* Main Content - Add padding-top to account for fixed navbar */}
+            <main className='pt-16'>
                 {children}
             </main>
         </div>
