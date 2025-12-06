@@ -60,7 +60,7 @@ export function ServicesList({ services }: ServicesListProps) {
                     </thead>
                     <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
                         {paginatedServices.map((service) => (
-                            <tr key={service.id} className='hover:bg-gray-50 dark:hover:bg-gray-700/50 transition'>
+                            <tr key={service.id} className='hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150'>
                                 <td className='px-6 py-4'>
                                     <div className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
                                         {service.name}
@@ -106,7 +106,7 @@ export function ServicesList({ services }: ServicesListProps) {
                 {paginatedServices.map((service) => (
                     <div
                         key={service.id}
-                        className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 relative'
+                        className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 relative hover:shadow-md transition-shadow duration-200'
                     >
                         {/* Actions - Top Right */}
                         <div className='absolute top-2 right-2'>

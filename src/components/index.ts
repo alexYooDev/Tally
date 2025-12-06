@@ -4,6 +4,8 @@ export * from './ui/badge';
 export * from './ui/button';
 export * from './ui/card';
 export * from './ui/dropdown-menu';
+export { GradientButton } from './ui/gradient-button';
+
 
 // Forms
 export * from './forms/form-field';
@@ -15,6 +17,12 @@ export * from './forms/textarea';
 export { PageContainer } from './layout/page-container';
 export { PageHeader } from './layout/page-header';
 export { PageLoading } from './layout/page-loading';
+export { Navbar } from './layout/navbar';
+export { HeroSection } from './layout/hero-section';
+export { FeaturesSection } from './layout/features-section';
+export { GetStartedSection } from './layout/get-started-section';
+export { Footer } from './layout/footer';
+
 
 // Feedback
 export { LoadingSpinner } from './feedback/loading-spinner';
