@@ -21,6 +21,7 @@ export function MobileNav({ userEmail, logoutAction }: MobileNavProps) {
         { href: '/dashboard/services', label: 'Services' },
         { href: '/dashboard/income', label: 'Income' },
         { href: '/dashboard/spending', label: 'Spending' },
+        { href: '/dashboard/insights', label: '✨ AI Insights' },
     ];
 
     const isActive = (href: string) => {
