@@ -6,8 +6,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signup } from '../actions';
+import { signup, signInWithOAuth } from '../actions';
 import { ErrorAlert, SuccessAlert, Button } from '@/components';
+import { OAuthButton, OAuthDivider } from '@/components/auth/oauth-button';
 
 export default function SignupPage() {
     const router = useRouter();
@@ -37,6 +38,17 @@ export default function SignupPage() {
             router.refresh();
         }
     }
+
+    async function handleOAuthSignIn(provider: 'google' | 'facebook') {
+        setError('');
+        setSuccess('');
+        try {
+            await signInWithOAuth(provider);
+            // Redirect happens automatically via Supabase
+        } catch (err) {
+            setError(`Failed to sign in with ${provider}`);
+        }
+    }
     return (
         <div>
             {/* Header */}
@@ -56,6 +68,16 @@ export default function SignupPage() {
             {success && (
                 <SuccessAlert className="mb-6">{success}</SuccessAlert>
             )}
+
+            {/* OAuth Buttons */}
+            <div className="space-y-3 mb-6">
+                <OAuthButton provider="google" onSignIn={handleOAuthSignIn} />
+                {/* <OAuthButton provider="facebook" onSignIn={handleOAuthSignIn} /> */}
+            </div>
+
+            {/* Divider */}
+            <OAuthDivider />
+
             {/* Signup Form */}
             <form onSubmit={handleSubmit} className='space-y-6'>
                 {/* Eamil field */}

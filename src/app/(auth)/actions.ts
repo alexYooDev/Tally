@@ -120,3 +120,29 @@ export async function resetPassword(formData: FormData) {
         message: 'Check your email for the password reset link!'
     }
 }
+
+/**
+ * Sign in with OAuth provider (Google or Facebook)
+ */
+export async function signInWithOAuth(provider: 'google' | 'facebook') {
+    const supabase = await createClient();
+    
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+        },
+    });
+
+    if (error) {
+        console.error(`${provider} OAuth error:`, error);
+        return { error: error.message };
+    }
+
+    // Redirect happens automatically via Supabase
+    if (data.url) {
+        redirect(data.url);
+    }
+
+    return { success: true };
+}

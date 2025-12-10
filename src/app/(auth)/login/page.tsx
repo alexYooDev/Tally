@@ -6,8 +6,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { login } from '../actions';
+import { login, signInWithOAuth } from '../actions';
 import { ErrorAlert, Button } from '@/components';
+import { OAuthButton, OAuthDivider } from '@/components/auth/oauth-button';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -32,6 +33,16 @@ export default function LoginPage() {
         if (result?.success) {
             router.push('/dashboard');
             router.refresh();
+        }
+    }
+
+    async function handleOAuthSignIn(provider: 'google' | 'facebook') {
+        setError('');
+        try {
+            await signInWithOAuth(provider);
+            // Redirect happens automatically via Supabase
+        } catch (err) {
+            setError(`Failed to sign in with ${provider}`);
         }
     }
     return (
@@ -90,11 +101,22 @@ export default function LoginPage() {
                 <Button
                     type='submit'
                     loading={loading}
+                    variant='default'
                     className='w-full'
                 >
                     {loading ? 'Signing in...' : 'Sign in'}
                 </Button>
             </form>
+
+            {/* Divider */}
+            <OAuthDivider />
+
+            {/* OAuth Buttons */}
+            <div className="space-y-3 mb-6">
+                <OAuthButton provider="google" onSignIn={handleOAuthSignIn} />
+                {/* <OAuthButton provider="facebook" onSignIn={handleOAuthSignIn} /> */}
+            </div>
+
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
