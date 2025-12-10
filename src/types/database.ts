@@ -509,6 +509,13 @@ export interface ValidationError {
   message: string;
 }
 
+/**
+ * AI Insight Generation record for rate limiting
+ */
+export interface AIInsightGeneration extends BaseEntity {
+    user_id: string;
+}
+
 export type TableName = 
   | 'categories' 
   | 'services' 
@@ -519,4 +526,5 @@ export type TableName =
   | 'subscriptions'
   | 'subscription_payments'
   | 'recurring_expenses'
-  | 'recurring_expense_payments';
+  | 'recurring_expense_payments'
+  | 'ai_insight_generations';

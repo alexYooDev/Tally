@@ -58,6 +58,12 @@ export default async function DashboardLayout({
                                 >
                                     Spending
                                 </Link>
+                                <Link
+                                    href='/dashboard/insights'
+                                    className='text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition flex items-center gap-1'
+                                >
+                                    <span>✨</span> AI Insights
+                                </Link>
                             </div>
                         </div>
                         {/* User Menu - Desktop */}
